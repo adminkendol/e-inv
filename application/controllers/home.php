@@ -50,6 +50,10 @@ class home extends CI_Controller {
         $data['menu_id']="5";
         $this->tempe->load('modul','supplier/form',$data);
     }
+    public function savesupplier(){
+        $post=$this->input->post();
+        print_r($post);
+    }
         function dashPenjualan($bulan='',$tahun=''){
 		$this->load->model("dashboard_model");
 		$data['series1']=$this->dashboard_model->sales_this_month($bulan,$tahun);
