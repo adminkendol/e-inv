@@ -62,6 +62,7 @@ class home extends CI_Controller {
         $data['headtitle']="Supplier";
         $data['menu']=$this->menu;
         $data['menu_id']="5";
+        $data['rec']=array();
         $this->form_validation->set_rules('id', 'ID Supplier', 'required');
         $this->form_validation->set_rules('name', 'Nama Supplier', 'required');
         $this->form_validation->set_rules('alamat', 'Alamat Supplier', 'required');
@@ -98,9 +99,93 @@ class home extends CI_Controller {
         $data['kategori']=$this->basedata->getKategori($id);
         $this->tempe->load('modul','kategori/kategori',$data);
     }
-    
-    
+    public function addkategori(){
+        $data['title']=$this->title;
+        $data['headtitle']="Kategori";
+        $data['menu']=$this->menu;
+        $data['menu_id']="6";
+        $data['rec']=array();
+        $this->tempe->load('modul','kategori/form',$data);
+    }
+    public function savekategori(){
+        $post=$this->input->post();
+        $data['title']=$this->title;
+        $data['headtitle']="Kategori";
+        $data['menu']=$this->menu;
+        $data['menu_id']="6";
+        $data['rec']=array();
+        $this->form_validation->set_rules('id', 'ID Kategori', 'required');
+        $this->form_validation->set_rules('kategori', 'Kategori', 'required');
+        if ($this->form_validation->run() == FALSE){
+            $this->tempe->load('modul','kategori/form',$data);
+        }else{
+            $this->basedata->setKategori($post);
+            redirect('home/kategori', 'refresh');
+        }
+    }
+    public function editkategori(){
+        $rec=$this->basedata->getKategori($this->record);
+        $data['title']=$this->title;
+        $data['headtitle']="Kategori";
+        $data['menu']=$this->menu;
+        $data['menu_id']="6";
+        $data['rec']=$rec;
+        $this->tempe->load('modul','kategori/form',$data);
+    }
+    public function remkategori(){
+        $this->basedata->delKategori($this->record);
+        redirect('home/kategori', 'refresh');
+    }
     /*--------------end kategori-----------------------------*/
+    
+    /*--------------satuan-----------------------------*/
+    public function satuan(){
+        $data['title']=$this->title;
+        $data['headtitle']="Satuan";
+        $data['menu']=$this->menu;
+        $data['menu_id']="7";
+        $id="all";
+        $data['satuan']=$this->basedata->getSatuan($id);
+        $this->tempe->load('modul','satuan/satuan',$data);
+    }
+    public function addsatuan(){
+        $data['title']=$this->title;
+        $data['headtitle']="Satuan";
+        $data['menu']=$this->menu;
+        $data['menu_id']="7";
+        $data['rec']=array();
+        $this->tempe->load('modul','satuan/form',$data);
+    }
+    public function savesatuan(){
+        $post=$this->input->post();
+        $data['title']=$this->title;
+        $data['headtitle']="Satuan";
+        $data['menu']=$this->menu;
+        $data['menu_id']="7";
+        $data['rec']=array();
+        $this->form_validation->set_rules('id', 'ID Satuan', 'required');
+        $this->form_validation->set_rules('satuan', 'Satuan', 'required');
+        if ($this->form_validation->run() == FALSE){
+            $this->tempe->load('modul','satuan/form',$data);
+        }else{
+            $this->basedata->setSatuan($post);
+            redirect('home/satuan', 'refresh');
+        }
+    }
+    public function editsatuan(){
+        $rec=$this->basedata->getSatuan($this->record);
+        $data['title']=$this->title;
+        $data['headtitle']="Satuan";
+        $data['menu']=$this->menu;
+        $data['menu_id']="7";
+        $data['rec']=$rec;
+        $this->tempe->load('modul','satuan/form',$data);
+    }
+    public function remsatuan(){
+        $this->basedata->delSatuan($this->record);
+        redirect('home/satuan', 'refresh');
+    }
+    /*--------------end satuan-----------------------------*/
     
     
         function dashPenjualan($bulan='',$tahun=''){
