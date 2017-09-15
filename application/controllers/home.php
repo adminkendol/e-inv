@@ -10,6 +10,8 @@ class home extends CI_Controller {
         $this->title = $this->config->item('title');
         $this->load->model(array('base/basedata'));
         $this->menu=$this->basedata->getMenu();
+        $last = $this->uri->total_segments();
+        $this->record = $this->uri->segment($last);
     }
     function index($limit='',$offset=''){	
             /*$this->load->model("init"); 
@@ -40,7 +42,8 @@ class home extends CI_Controller {
         $data['headtitle']="Supplier";
         $data['menu']=$this->menu;
         $data['menu_id']="5";
-        $data['supplier']=$this->basedata->getSupplier();
+        $id="all";
+        $data['supplier']=$this->basedata->getSupplier($id);
         $this->tempe->load('modul','supplier/supplier',$data);
     }
     public function addsupplier(){
@@ -48,6 +51,7 @@ class home extends CI_Controller {
         $data['headtitle']="Supplier";
         $data['menu']=$this->menu;
         $data['menu_id']="5";
+        $data['rec']=array();
         $this->tempe->load('modul','supplier/form',$data);
     }
     public function savesupplier(){
@@ -64,8 +68,22 @@ class home extends CI_Controller {
         if ($this->form_validation->run() == FALSE){
             $this->tempe->load('modul','supplier/form',$data);
         }else{
-            //$this->tempe->load('modul','supplier/form',$data);
+            $this->basedata->setSupplier($post);
+            redirect('home/supplier', 'refresh');
         }
+    }
+    public function editsupplier(){
+        $rec=$this->basedata->getSupplier($this->record);
+        $data['title']=$this->title;
+        $data['headtitle']="Supplier";
+        $data['menu']=$this->menu;
+        $data['menu_id']="5";
+        $data['rec']=$rec;
+        $this->tempe->load('modul','supplier/form',$data);
+    }
+    public function remsupplier(){
+        $this->basedata->delSupplier($this->record);
+        redirect('home/supplier', 'refresh');
     }
         function dashPenjualan($bulan='',$tahun=''){
 		$this->load->model("dashboard_model");

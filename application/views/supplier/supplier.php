@@ -14,6 +14,7 @@
                             <th>Nama Supplier</th>
                             <th>Alamat</th>
                             <th>Telepon</th>
+                            <th></th>
                         </thead>
                         <tbody>
                             <?php foreach($supplier as $s){ ?>
@@ -22,6 +23,10 @@
                                 <td><?php echo $s->nama; ?></td>
                                 <td><?php echo $s->alamat; ?></td>
                                 <td><?php echo $s->telepon; ?></td>
+                                <td>
+                                    <a type="button" href="<?php echo base_url().'home/editsupplier/'.$s->id; ?>" class="btn-sm btn-primary">Edit</a>
+                                    <a type="button" href="<?php echo base_url().'home/remsupplier/'.$s->id; ?>" class="btn-sm btn-danger">Hapus</a>
+                                </td>
                             </tr>
                             <?php } ?>
                         </tbody>

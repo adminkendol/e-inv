@@ -1,8 +1,17 @@
-<?php 
-$id=set_value('id');
-$name=set_value('name');
-$alamat=set_value('alamat');
-$phone=set_value('phone');
+<?php
+if(sizeof($rec)==0){
+    $idRec=set_value('idRec');
+    $id=set_value('id');
+    $name=set_value('name');
+    $alamat=set_value('alamat');
+    $phone=set_value('phone');
+}else{
+    $idRec=$rec[0]->id;
+    $id=$rec[0]->id_supplier;
+    $name=$rec[0]->nama;
+    $alamat=$rec[0]->alamat;
+    $phone=$rec[0]->telepon;
+}
 ?>
 <div class="container-fluid">
     <div class="row">
@@ -28,6 +37,7 @@ $phone=set_value('phone');
                                 <div class="form-group label-floating">
                                     <label class="control-label">ID Supplier</label>
                                     <input type="text" class="form-control" name="id" value="<?php echo $id; ?>">
+                                    <input type="hidden" name="idRec" value="<?php echo $idRec; ?>">
                                 </div>
                             </div>
                             <div class="col-md-6">
