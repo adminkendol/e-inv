@@ -37,6 +37,7 @@ class home extends CI_Controller {
         $data['menu_id']="1";
         $this->tempe->load('modul','dashboard',$data);
     }
+    /*--------------supplier-----------------------------*/
     public function supplier(){
         $data['title']=$this->title;
         $data['headtitle']="Supplier";
@@ -85,6 +86,23 @@ class home extends CI_Controller {
         $this->basedata->delSupplier($this->record);
         redirect('home/supplier', 'refresh');
     }
+    /*--------------end supplier-----------------------------*/
+    
+    /*--------------kategori-----------------------------*/
+    public function kategori(){
+        $data['title']=$this->title;
+        $data['headtitle']="Kategori";
+        $data['menu']=$this->menu;
+        $data['menu_id']="6";
+        $id="all";
+        $data['kategori']=$this->basedata->getKategori($id);
+        $this->tempe->load('modul','kategori/kategori',$data);
+    }
+    
+    
+    /*--------------end kategori-----------------------------*/
+    
+    
         function dashPenjualan($bulan='',$tahun=''){
 		$this->load->model("dashboard_model");
 		$data['series1']=$this->dashboard_model->sales_this_month($bulan,$tahun);

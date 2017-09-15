@@ -14,6 +14,7 @@ class Basedata extends CI_Model {
         $query=$this->db->query("SELECT * FROM menu ORDER BY sort ASC");
         return $query->result();
     }
+    /*---------------------supplier---------------*/
     public function getSupplier($id){
         if($id!="all"){
             $where="WHERE id='$id'";
@@ -41,5 +42,18 @@ class Basedata extends CI_Model {
     public function delSupplier($id){
         $this->db->query("DELETE FROM supplier WHERE id='$id'");
     }
+    /*---------------------end supplier---------------*/
     
+    /*---------------------kategori---------------*/
+    public function getKategori($id){
+        if($id!="all"){
+            $where="WHERE id='$id'";
+        }else{
+            $where="";
+        }
+        $query=$this->db->query("SELECT * FROM kategori $where ORDER BY id DESC");
+        return $query->result();
+    }
+    
+    /*---------------------end kategori---------------*/
 }
