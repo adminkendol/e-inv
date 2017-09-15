@@ -187,6 +187,46 @@ class home extends CI_Controller {
     }
     /*--------------end satuan-----------------------------*/
     
+    /*--------------tax-----------------------------*/
+    public function tax(){
+        $data['title']=$this->title;
+        $data['headtitle']="Tax";
+        $data['menu']=$this->menu;
+        $data['menu_id']="8";
+        $id="all";
+        $data['rec']=$this->basedata->getTax($id);
+        $this->tempe->load('modul','tax/form',$data);
+    }
+    public function savetax(){
+        $post=$this->input->post();
+        $data['title']=$this->title;
+        $data['headtitle']="Pajak";
+        $data['menu']=$this->menu;
+        $data['menu_id']="8";
+        $id="all";
+        $data['rec']=$this->basedata->getTax($id);
+        $this->form_validation->set_rules('tax', 'Pajak', 'required');
+        if ($this->form_validation->run() == FALSE){
+            $this->tempe->load('modul','tax/form',$data);
+        }else{
+            $this->basedata->setTax($post);
+            redirect('home/tax', 'refresh');
+        }
+    }
+    /*--------------end tax-----------------------------*/
+    
+    /*--------------barang-----------------------------*/
+    public function barang(){
+        $data['title']=$this->title;
+        $data['headtitle']="Barang";
+        $data['menu']=$this->menu;
+        $data['menu_id']="4";
+        $id="all";
+        $data['satuan']=$this->basedata->getBarang($id);
+        $this->tempe->load('modul','barang/barang',$data);
+    }
+    /*--------------end barang-----------------------------*/
+    
     
         function dashPenjualan($bulan='',$tahun=''){
 		$this->load->model("dashboard_model");

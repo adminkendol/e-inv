@@ -99,4 +99,63 @@ class Basedata extends CI_Model {
         $this->db->query("DELETE FROM satuan WHERE id='$id'");
     }
     /*---------------------end satuan---------------*/
+    
+    /*---------------------tax---------------*/
+    public function getTax($id){
+        if($id!="all"){
+            $where="WHERE id='$id'";
+        }else{
+            $where="";
+        }
+        $query=$this->db->query("SELECT * FROM tax $where ORDER BY id DESC");
+        return $query->result();
+    }
+    public function setTax($post){
+        $cek=$this->getTax($post['idRec']);
+        $data = array(
+            'tax'=>$post['tax']
+        );
+        if(sizeof($cek)==0){
+            $this->db->insert('tax',$data);
+        }else{
+            $this->db->where('id', $post['idRec']);
+            $this->db->update('tax', $data);
+        }
+    }
+    /*---------------------end tax---------------*/
+    
+    /*---------------------barang---------------*/
+    public function getBarang($id){
+        if($id!="all"){
+            $where="WHERE id='$id'";
+        }else{
+            $where="";
+        }
+        $query=$this->db->query("SELECT * FROM barang $where ORDER BY id DESC");
+        return $query->result();
+    }
+    public function setBarang($post){
+        $cek=$this->getSatuan($post['idRec']);
+        $data = array(
+            'id_barang'=>$post['id'],
+            'nama'=>$post['name'],
+            'kategori'=>$post['kategori'],
+            'stok'=>$post['stok'],
+            'satuan'=>$post['satuan'],
+            'isi'=>$post['isi'],
+            'harga_beli'=>$post['harga_beli'],
+            'harga_jual'=>$post['harga_jual'],
+            'expired'=>$post['expired']
+        );
+        if(sizeof($cek)==0){
+            $this->db->insert('barang',$data);
+        }else{
+            $this->db->where('id', $post['idRec']);
+            $this->db->update('barang', $data);
+        }
+    }
+    public function delBarang($id){
+        $this->db->query("DELETE FROM barang WHERE id='$id'");
+    }
+    /*---------------------end barang---------------*/
 }
