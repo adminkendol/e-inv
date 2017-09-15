@@ -14,6 +14,7 @@
     <!--  Material Dashboard CSS    -->
     <link href="<?php echo base_url(); ?>assets/css/material-dashboard.css?v=1.2.0" rel="stylesheet" />
     <!--  CSS for Demo Purpose, don't include it in your project     -->
+    <link href="<?php echo base_url(); ?>assets/css/datepicker.css" rel="stylesheet" />
     <link href="<?php echo base_url(); ?>assets/css/demo.css" rel="stylesheet" />
     <!--     Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
@@ -149,6 +150,7 @@
 <!-- Material Dashboard javascript methods -->
 <script src="<?php echo base_url(); ?>assets/js/material-dashboard.js?v=1.2.0"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
+<script src="<?php echo base_url(); ?>assets/js/bootstrap-datepicker.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/demo.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/fire.js"></script>
 <script type="text/javascript">
@@ -156,7 +158,13 @@
 
         // Javascript method's body can be found in assets/js/demos.js
         demo.initDashboardPageCharts();
-
+        $('.tgl')
+        .datepicker({
+            format: 'dd-mm-yyyy',
+            autoclose: true,
+        }).on('changeDate', function (ev) {
+            $(this).datepicker('hide');
+        });
     });
     
 </script>

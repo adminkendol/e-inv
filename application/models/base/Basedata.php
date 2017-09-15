@@ -127,15 +127,19 @@ class Basedata extends CI_Model {
     /*---------------------barang---------------*/
     public function getBarang($id){
         if($id!="all"){
-            $where="WHERE id='$id'";
+            $where="WHERE b.id='$id'";
         }else{
             $where="";
         }
-        $query=$this->db->query("SELECT * FROM barang $where ORDER BY id DESC");
+        $query=$this->db->query("SELECT b.*,k.kategori AS kat,s.satuan AS sat 
+                FROM barang b
+                LEFT JOIN kategori k ON k.id=b.kategori
+                LEFT JOIN satuan s ON s.id=b.satuan 
+                $where ORDER BY id DESC");
         return $query->result();
     }
     public function setBarang($post){
-        $cek=$this->getSatuan($post['idRec']);
+        $cek=$this->getBarang($post['idRec']);
         $data = array(
             'id_barang'=>$post['id'],
             'nama'=>$post['name'],
@@ -143,9 +147,9 @@ class Basedata extends CI_Model {
             'stok'=>$post['stok'],
             'satuan'=>$post['satuan'],
             'isi'=>$post['isi'],
-            'harga_beli'=>$post['harga_beli'],
-            'harga_jual'=>$post['harga_jual'],
-            'expired'=>$post['expired']
+            'harga_beli'=>$post['buy'],
+            'harga_jual'=>$post['sell'],
+            'expired'=>date("Y-m-d",strtotime($post['exp']))
         );
         if(sizeof($cek)==0){
             $this->db->insert('barang',$data);

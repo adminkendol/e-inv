@@ -222,8 +222,58 @@ class home extends CI_Controller {
         $data['menu']=$this->menu;
         $data['menu_id']="4";
         $id="all";
-        $data['satuan']=$this->basedata->getBarang($id);
+        $data['barang']=$this->basedata->getBarang($id);
         $this->tempe->load('modul','barang/barang',$data);
+    }
+    public function addbarang(){
+        $data['title']=$this->title;
+        $data['headtitle']="Barang";
+        $data['menu']=$this->menu;
+        $data['menu_id']="4";
+        $data['rec']=array();
+        $id="all";
+        $data['kategori']=$this->basedata->getKategori($id);
+        $data['satuan']=$this->basedata->getSatuan($id);
+        $this->tempe->load('modul','barang/form',$data);
+    }
+    public function savebarang(){
+        $post=$this->input->post();
+        $data['title']=$this->title;
+        $data['headtitle']="Barang";
+        $data['menu']=$this->menu;
+        $data['menu_id']="4";
+        $data['rec']=array();
+        $this->form_validation->set_rules('id', 'ID Barang', 'required');
+        $this->form_validation->set_rules('name', 'Barang', 'required');
+        $this->form_validation->set_rules('kategori', 'Kategori', 'required');
+        $this->form_validation->set_rules('satuan', 'Satuan', 'required');
+        $this->form_validation->set_rules('stok', 'Stok', 'required');
+        $this->form_validation->set_rules('exp', 'Kadaluarsa', 'required');
+        $this->form_validation->set_rules('buy', 'Harga Jual', 'required');
+        $this->form_validation->set_rules('sell', 'Harga Beli', 'required');
+        $this->form_validation->set_rules('isi', 'Isi', 'required');
+        if ($this->form_validation->run() == FALSE){
+            $this->tempe->load('modul','satuan/form',$data);
+        }else{
+            $this->basedata->setBarang($post);
+            redirect('home/barang', 'refresh');
+        }
+    }
+    public function editbarang(){
+        $rec=$this->basedata->getBarang($this->record);
+        $data['title']=$this->title;
+        $data['headtitle']="Barang";
+        $data['menu']=$this->menu;
+        $data['menu_id']="4";
+        $data['rec']=$rec;
+        $id="all";
+        $data['kategori']=$this->basedata->getKategori($id);
+        $data['satuan']=$this->basedata->getSatuan($id);
+        $this->tempe->load('modul','barang/form',$data);
+    }
+    public function rembarang(){
+        $this->basedata->delBarang($this->record);
+        redirect('home/barang', 'refresh');
     }
     /*--------------end barang-----------------------------*/
     
