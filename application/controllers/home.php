@@ -52,7 +52,20 @@ class home extends CI_Controller {
     }
     public function savesupplier(){
         $post=$this->input->post();
-        print_r($post);
+        //print_r($post);
+        $data['title']=$this->title;
+        $data['headtitle']="Supplier";
+        $data['menu']=$this->menu;
+        $data['menu_id']="5";
+        $this->form_validation->set_rules('id', 'ID Supplier', 'required');
+        $this->form_validation->set_rules('name', 'Nama Supplier', 'required');
+        $this->form_validation->set_rules('alamat', 'Alamat Supplier', 'required');
+        $this->form_validation->set_rules('phone', 'No telepon Supplier', 'required');
+        if ($this->form_validation->run() == FALSE){
+            $this->tempe->load('modul','supplier/form',$data);
+        }else{
+            //$this->tempe->load('modul','supplier/form',$data);
+        }
     }
         function dashPenjualan($bulan='',$tahun=''){
 		$this->load->model("dashboard_model");

@@ -59,7 +59,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
 //$autoload['libraries'] = array();
-$autoload['libraries'] = array('tempe','database','Simple_html_dom');
+$autoload['libraries'] = array('tempe','database','Simple_html_dom','form_validation');
 /*
 | -------------------------------------------------------------------
 |  Auto-load Drivers

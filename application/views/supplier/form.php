@@ -14,6 +14,15 @@ $phone=set_value('phone');
                 </div>
                 <div class="card-content">
                     <form method="post" action="<?php echo base_url().'home/savesupplier';?>">
+                        <?php
+                        if(validation_errors()){ ?>
+                            <div class="alert alert-danger">
+                                <button type="button" aria-hidden="true" class="close">×</button>
+                                <span><?php echo validation_errors();?></span>
+                            </div>
+                        <?php    
+                        }
+                        ?>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group label-floating">
@@ -32,7 +41,7 @@ $phone=set_value('phone');
                             <div class="col-md-12">
                                 <div class="form-group label-floating">
                                     <label class="control-label">Alamat Supplier</label>
-                                    <textarea class="form-control" rows="5" name="alamat"> value="<?php echo $alamat; ?>"</textarea>
+                                    <textarea class="form-control" rows="5" name="alamat"><?php echo $alamat; ?></textarea>
                                 </div>
                             </div>
                         </div>
@@ -51,4 +60,4 @@ $phone=set_value('phone');
             </div>
         </div>
     </div>
-</div>            
+</div>
