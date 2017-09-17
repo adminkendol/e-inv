@@ -4,7 +4,7 @@
             <div class="card">
                 <div class="card-header" data-background-color="orange">
                     <h4 class="title">Barang Stats</h4>
-                    <a type="button" href="<?php echo base_url().'home/addbarang/'; ?>" class="btn btn-primary pull-right">Tambah Barang</a>
+                    <a type="button" href="<?php echo base_url().'core/addbarang/'; ?>" class="btn btn-primary pull-right">Tambah Barang</a>
                 </div>
                 <div class="card-content table-responsive">
                     <table class="table table-hover">
@@ -33,13 +33,14 @@
                                 <td><?php echo number_format($s->harga_jual,2,',','.'); ?></td>
                                 <td><?php echo date("d-m-Y",strtotime($s->expired)); ?></td>
                                 <td>
-                                    <a type="button" href="<?php echo base_url().'home/editbarang/'.$s->id; ?>" class="btn-sm btn-primary">Edit</a>
-                                    <a type="button" href="<?php echo base_url().'home/rembarang/'.$s->id; ?>" class="btn-sm btn-danger">Hapus</a>
+                                    <a type="button" href="<?php echo base_url().'core/editbarang/'.$s->id; ?>" class="btn-sm btn-primary">Edit</a>
+                                    <a type="button" href="<?php echo base_url().'core/rembarang/'.$s->id; ?>" class="btn-sm btn-danger">Hapus</a>
                                 </td>
                             </tr>
                             <?php } ?>
                         </tbody>
                     </table>
+                    <div class="panel-footer"><?=$pagination?></div>
                 </div>
             </div>
         </div>

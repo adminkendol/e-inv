@@ -4,7 +4,7 @@
             <div class="card">
                 <div class="card-header" data-background-color="orange">
                     <h4 class="title">Satuan Stats</h4>
-                    <a type="button" href="<?php echo base_url().'home/addsatuan/'; ?>" class="btn btn-primary pull-right">Tambah Satuan</a>
+                    <a type="button" href="<?php echo base_url().'core/addsatuan/'; ?>" class="btn btn-primary pull-right">Tambah Satuan</a>
                 </div>
                 <div class="card-content table-responsive">
                     <table class="table table-hover">
@@ -19,8 +19,8 @@
                                 <td><?php echo $s->id_satuan; ?></td>
                                 <td><?php echo $s->satuan; ?></td>
                                 <td>
-                                    <a type="button" href="<?php echo base_url().'home/editsatuan/'.$s->id; ?>" class="btn-sm btn-primary">Edit</a>
-                                    <a type="button" href="<?php echo base_url().'home/remsatuan/'.$s->id; ?>" class="btn-sm btn-danger">Hapus</a>
+                                    <a type="button" href="<?php echo base_url().'core/editsatuan/'.$s->id; ?>" class="btn-sm btn-primary">Edit</a>
+                                    <a type="button" href="<?php echo base_url().'core/remsatuan/'.$s->id; ?>" class="btn-sm btn-danger">Hapus</a>
                                 </td>
                             </tr>
                             <?php } ?>

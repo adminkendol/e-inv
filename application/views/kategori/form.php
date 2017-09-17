@@ -18,7 +18,7 @@ if(sizeof($rec)==0){
                     <p class="category">Lengkapi isi field</p>
                 </div>
                 <div class="card-content">
-                    <form method="post" action="<?php echo base_url().'home/savekategori';?>">
+                    <form method="post" action="<?php echo base_url().'core/savekategori';?>">
                         <?php
                         if(validation_errors()){ ?>
                             <div class="alert alert-danger">

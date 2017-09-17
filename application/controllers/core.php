@@ -1,13 +1,16 @@
 <?php  
 
-class home extends CI_Controller {
+class Core extends CI_Controller {
  
     var $limit=10;
     var $offset=10;
     function __construct(){
         parent::__construct();
         $this->config->load('config', true);
+        $this->config->load('pagination', TRUE);
         $this->title = $this->config->item('title');
+        // access pagination settings
+        $this->settings = $this->config->item('pagination');
         $this->load->model(array('base/basedata'));
         $this->menu=$this->basedata->getMenu();
         $last = $this->uri->total_segments();
@@ -26,7 +29,7 @@ class home extends CI_Controller {
                 $this->load->view('index',$data); 
                     
             } else {
-                    redirect('home/loginPage');		
+                    redirect('core/loginPage');		
             }*/
             $this->dashboard();
     }
@@ -71,7 +74,7 @@ class home extends CI_Controller {
             $this->tempe->load('modul','supplier/form',$data);
         }else{
             $this->basedata->setSupplier($post);
-            redirect('home/supplier', 'refresh');
+            redirect('core/supplier', 'refresh');
         }
     }
     public function editsupplier(){
@@ -85,7 +88,7 @@ class home extends CI_Controller {
     }
     public function remsupplier(){
         $this->basedata->delSupplier($this->record);
-        redirect('home/supplier', 'refresh');
+        redirect('core/supplier', 'refresh');
     }
     /*--------------end supplier-----------------------------*/
     
@@ -120,7 +123,7 @@ class home extends CI_Controller {
             $this->tempe->load('modul','kategori/form',$data);
         }else{
             $this->basedata->setKategori($post);
-            redirect('home/kategori', 'refresh');
+            redirect('core/kategori', 'refresh');
         }
     }
     public function editkategori(){
@@ -134,7 +137,7 @@ class home extends CI_Controller {
     }
     public function remkategori(){
         $this->basedata->delKategori($this->record);
-        redirect('home/kategori', 'refresh');
+        redirect('core/kategori', 'refresh');
     }
     /*--------------end kategori-----------------------------*/
     
@@ -169,7 +172,7 @@ class home extends CI_Controller {
             $this->tempe->load('modul','satuan/form',$data);
         }else{
             $this->basedata->setSatuan($post);
-            redirect('home/satuan', 'refresh');
+            redirect('core/satuan', 'refresh');
         }
     }
     public function editsatuan(){
@@ -183,7 +186,7 @@ class home extends CI_Controller {
     }
     public function remsatuan(){
         $this->basedata->delSatuan($this->record);
-        redirect('home/satuan', 'refresh');
+        redirect('core/satuan', 'refresh');
     }
     /*--------------end satuan-----------------------------*/
     
@@ -210,7 +213,7 @@ class home extends CI_Controller {
             $this->tempe->load('modul','tax/form',$data);
         }else{
             $this->basedata->setTax($post);
-            redirect('home/tax', 'refresh');
+            redirect('core/tax', 'refresh');
         }
     }
     /*--------------end tax-----------------------------*/
@@ -222,8 +225,20 @@ class home extends CI_Controller {
         $data['menu']=$this->menu;
         $data['menu_id']="4";
         $id="all";
-        $data['barang']=$this->basedata->getBarang($id);
+        $this->settings['base_url'] = site_url('core/barang');
+        $this->settings['total_rows'] = $this->basedata->count_barang();
+        $choice = $this->settings["total_rows"] / $this->settings["per_page"];
+        $this->settings["num_links"] = floor($choice);
+        $this->pagination->initialize($this->settings);
+        $data['page'] = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data['pagination'] = $this->pagination->create_links();
+        $data['barang']=$this->basedata->getBarang($id,$this->settings["per_page"], $data['page']);
         $this->tempe->load('modul','barang/barang',$data);
+    }
+    public function apibrg(){
+        $name=$this->input->get('query');
+        $rec=$this->basedata->getApiBarang($name);
+        echo json_encode($rec);
     }
     public function addbarang(){
         $data['title']=$this->title;
@@ -243,6 +258,9 @@ class home extends CI_Controller {
         $data['menu']=$this->menu;
         $data['menu_id']="4";
         $data['rec']=array();
+        $id="all";
+        $data['kategori']=$this->basedata->getKategori($id);
+        $data['satuan']=$this->basedata->getSatuan($id);
         $this->form_validation->set_rules('id', 'ID Barang', 'required');
         $this->form_validation->set_rules('name', 'Barang', 'required');
         $this->form_validation->set_rules('kategori', 'Kategori', 'required');
@@ -253,14 +271,16 @@ class home extends CI_Controller {
         $this->form_validation->set_rules('sell', 'Harga Beli', 'required');
         $this->form_validation->set_rules('isi', 'Isi', 'required');
         if ($this->form_validation->run() == FALSE){
-            $this->tempe->load('modul','satuan/form',$data);
+            $this->tempe->load('modul','barang/form',$data);
         }else{
             $this->basedata->setBarang($post);
-            redirect('home/barang', 'refresh');
+            redirect('core/barang', 'refresh');
         }
     }
     public function editbarang(){
-        $rec=$this->basedata->getBarang($this->record);
+        $batas="";
+        $offset="";
+        $rec=$this->basedata->getBarang($this->record,$batas,$offset);
         $data['title']=$this->title;
         $data['headtitle']="Barang";
         $data['menu']=$this->menu;
@@ -273,33 +293,133 @@ class home extends CI_Controller {
     }
     public function rembarang(){
         $this->basedata->delBarang($this->record);
-        redirect('home/barang', 'refresh');
+        redirect('core/barang', 'refresh');
     }
     /*--------------end barang-----------------------------*/
     
+    /*--------------pembelian-----------------------------*/
+    public function beli(){
+        $data['title']=$this->title;
+        $data['headtitle']="Pembelian";
+        $data['menu']=$this->menu;
+        $data['menu_id']="2";
+        $id="all";
+        //pagination settings
+        $this->settings['base_url'] = site_url('core/beli');
+        $this->settings['total_rows'] = $this->basedata->count_beli();
+        $choice = $this->settings["total_rows"] / $this->settings["per_page"];
+        $this->settings["num_links"] = floor($choice);
+        $this->pagination->initialize($this->settings);
+        $data['page'] = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data['pagination'] = $this->pagination->create_links();
+        $data['beli']=$this->basedata->getBeli($id,$this->settings["per_page"], $data['page']);
+        $this->tempe->load('modul','beli/beli',$data);
+    }
+    /*public function addbeli(){
+        $data['title']=$this->title;
+        $data['headtitle']="Pembelian";
+        $data['menu']=$this->menu;
+        $data['menu_id']="2";
+        $data['rec']=array();
+        $id="all";
+        $data['supplier']=$this->basedata->getSupplier($id);
+        $data['kategori']=$this->basedata->getKategori($id);
+        $data['satuan']=$this->basedata->getSatuan($id);
+        $this->tempe->load('modul','beli/form',$data);
+    }*/
+    function addbeli(){
+        $data['title']=$this->title;
+        $data['headtitle']="Pembelian";
+        $data['menu']=$this->menu;
+        $data['menu_id']="2";
+        $data['rec']=array();
+        $id="all";
+        
+        $data['judul']='Pembelian';
+	$data['view']='beli/form_beli';
+	$data['table']=$this->generateFaktur();
+	//$this->load->view('index',$data);
+        $this->tempe->load('modul','beli/form_beli',$data);
+    }
+    function actbeli(){
+        $array=$this->input->post('lstobat');
+	if(count(array_unique($array))<count($array)){
+            echo"Nama Barang Tidak Boleh Sama";
+            return false;
+	}else{
+            $this->basedata->actionbeli();
+	}
+    }
+    function nextForm(){
+        $jumbeli=$this->input->post('jumbeli');
+	$table='';
+	$table.=$this->generateForm();
+	echo $table;
+    }
+    /*--------------end pembelian-----------------------------*/
+    function generateFaktur(){
+        $table='';
+	$table.='<table>';
+	$table.='<tr>';
+	//$table.='<tr><input type="text" id="jumbeli" name="jumbeli"  class="input-xlarge"   href="#"  placeholder="Jumlah Item Pembelian">  &nbsp; &nbsp;</td>';
+        $table.='<tr><td><input type="text" class="form-control" id="jumbeli" name="jumbeli" value=""></td>';
+	$table.='</tr>';
+	$table.='</table>';
+        return $table; 
+    }
+    function generateForm(){
+        $table='';
+	$faktur=$this->basedata->autoFaktur();
+	$listObat=$this->generateListBeli();
+	$customer=$this->basedata->generateComboSupplier();
+	$sesbeli='<input type="hidden" id="sesbeli" name="sesbeli" value="'.date("YmdHms").'">';
+	$table.=$sesbeli;
+	$table.='<table border="0" style="width:100%">
+                    <tbody>
+                        <tr>
+                            <td>Tanggal</td>
+                            <td>:</td>
+                            <td>
+                                <input type="hidden"  id="tanggal"  name="tanggal" readonly="" size="10" value="'.date("Y-m-d").'">
+				<a href="#" type="button" class="btn btn-warning">'.date("d-F-Y").'</a>
+                            </td>
+			</tr>
+			<tr>
+                            <td>Supplier</td>
+                            <td>:</td>
+                            <td>'.$customer.'</td>
+			</tr>
+			<tr>
+                            <td>No Faktur</td>
+                            <td>:</td>
+                            <td><input type="text" class="span6" id="faktur" name="faktur" placeholder="Faktur" value="'.$faktur.'" style="width:400px"></td>
+			</tr>
+			<tr>
+                            <td colspan="3"><br><hr><br></td>
+			</tr>
+                    </tbody>
+                </table>
+		<table style="width:100%">
+                    <tr>
+			<td>'.$listObat.'</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a onclick="return confirmdlg()" type="button" class="btn btn-primary">Simpan</a>
+                            <a href="'.base_url().'jual"  type="button" class="btn btn-danger">Kembali</a>
+			</td>
+                    </tr>
+		</table>';
+				 
+        return $table; 
+    }
+    function generateListBeli(){
+        return $this->basedata->generateListBeli();
+    }
+    function refreshDetail(){
+	$this->basedata->refreshDetail();
+    }
     
-        function dashPenjualan($bulan='',$tahun=''){
-		$this->load->model("dashboard_model");
-		$data['series1']=$this->dashboard_model->sales_this_month($bulan,$tahun);
-		$this->load->view('dashboard/chart1',$data);
-	}
-	function dashPembelian($bulan='',$tahun=''){
-		$this->load->model("dashboard_model");
-		$data['series2']=$this->dashboard_model->buy_this_month($bulan,$tahun);
-		$this->load->view('dashboard/chart2',$data);
-	}
-	function loginPage(){
-		$this->load->view('login');
-	}
-	function loginAct(){
-		$this->load->model("user_model");
-		$this->user_model->cek();
-	}
- 
-	function logout(){
-		$this->session->sess_destroy();
-		redirect('home/loginPage');		
-	}
     public function error(){
         $data['title']=$this->title;
         $data['headtitle']="Error";

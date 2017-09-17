@@ -15,13 +15,16 @@
     <link href="<?php echo base_url(); ?>assets/css/material-dashboard.css?v=1.2.0" rel="stylesheet" />
     <!--  CSS for Demo Purpose, don't include it in your project     -->
     <link href="<?php echo base_url(); ?>assets/css/datepicker.css" rel="stylesheet" />
+    <link href="<?php echo base_url(); ?>assets/css/bootcomplete.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/demo.css" rel="stylesheet" />
     <!--     Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'>
+    <!--<link rel="stylesheet" href="<?php echo base_url();?>assets/css/themes/jquery.ui.dialog.css" type="text/css" />-->
 </head>
 
 <body>
+    <div id="infodlg" style="display:none"></div> 
     <div class="wrapper">
         <!--<div class="sidebar" data-color="purple" data-image="<?php echo base_url(); ?>assets/img/sidebar-1.jpg">-->
             <!--
@@ -39,7 +42,7 @@
                 <ul class="nav">
                     <?php foreach($menu as $m){ ?>
                     <li class="<?php if($menu_id==$m->menu_id){ echo "active";} else{ echo "notactive"; }  ?>">
-                        <a href="<?php echo base_url()."home/".$m->url; ?>">
+                        <a href="<?php echo base_url()."core/".$m->url; ?>">
                             <i class="material-icons"><?php echo $m->icon; ?></i>
                             <p><?php echo $m->menu_name; ?></p>
                         </a>
@@ -134,7 +137,9 @@
     </div>
 </body>
 <!--   Core JS Files   -->
-<script src="<?php echo base_url(); ?>assets/js/jquery-3.2.1.min.js" type="text/javascript"></script>
+<!--<script src="<?php echo base_url(); ?>assets/js/jquery-3.2.1.min.js" type="text/javascript"></script>-->
+<script src="<?php echo base_url()?>assets/js/jquery-1.10.2.js"></script>
+<script src="<?php echo base_url()?>assets/js/jquery-ui-1.10.3.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="<?php echo base_url(); ?>assets/js/material.min.js" type="text/javascript"></script>
 <!--  Charts Plugin -->
@@ -146,11 +151,12 @@
 <!--  Notifications Plugin    -->
 <script src="<?php echo base_url(); ?>assets/js/bootstrap-notify.js"></script>
 <!--  Google Maps Plugin    -->
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+<!--<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>-->
 <!-- Material Dashboard javascript methods -->
 <script src="<?php echo base_url(); ?>assets/js/material-dashboard.js?v=1.2.0"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
 <script src="<?php echo base_url(); ?>assets/js/bootstrap-datepicker.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery.bootcomplete.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/demo.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/fire.js"></script>
 <script type="text/javascript">
@@ -165,8 +171,31 @@
         }).on('changeDate', function (ev) {
             $(this).datepicker('hide');
         });
+        /*$("#barang").autocomplete({
+          source: '<?php echo base_url()."core/apibrg?query="; ?>'+$(this).val(),
+          minLength: 2,
+          delay: 1,
+          select: function( event, ui ) {
+            if (ui.item) {
+              console.log("Selected: " + ui.item.id + " aka " + ui.item.label);
+              $(this).val(ui.item.label);
+              $('#barang_id').val(ui.item.id);
+            } else {
+              // "Nothing selected, input was " + this.value );
+            }
+            return false;
+          }
+        });*/
+
     });
-    
+    $('#barang').bootcomplete({
+        url:'<?php echo base_url()."core/apibrg"; ?>',
+        minLength:2
+    });
+    /*function check(){
+          alert("Input box changed");
+          // Things to do when the textbox changes
+     }*/
 </script>
 
 </html>

@@ -5,7 +5,7 @@
                 <div class="card-header" data-background-color="orange">
                     <h4 class="title">Supplier Stats</h4>
                     <p class="category">New supplier on 15th September, 2016</p>
-                    <a type="button" href="<?php echo base_url().'home/addsupplier/'; ?>" class="btn btn-primary pull-right">Tambah Supplier</a>
+                    <a type="button" href="<?php echo base_url().'core/addsupplier/'; ?>" class="btn btn-primary pull-right">Tambah Supplier</a>
                 </div>
                 <div class="card-content table-responsive">
                     <table class="table table-hover">
@@ -24,8 +24,8 @@
                                 <td><?php echo $s->alamat; ?></td>
                                 <td><?php echo $s->telepon; ?></td>
                                 <td>
-                                    <a type="button" href="<?php echo base_url().'home/editsupplier/'.$s->id; ?>" class="btn-sm btn-primary">Edit</a>
-                                    <a type="button" href="<?php echo base_url().'home/remsupplier/'.$s->id; ?>" class="btn-sm btn-danger">Hapus</a>
+                                    <a type="button" href="<?php echo base_url().'core/editsupplier/'.$s->id; ?>" class="btn-sm btn-primary">Edit</a>
+                                    <a type="button" href="<?php echo base_url().'core/remsupplier/'.$s->id; ?>" class="btn-sm btn-danger">Hapus</a>
                                 </td>
                             </tr>
                             <?php } ?>

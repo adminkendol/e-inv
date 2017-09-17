@@ -2,28 +2,31 @@
 //$exp=date('d-m-Y',strtotime("+1 year"));
 if(sizeof($rec)==0){
     $idRec=set_value('idRec');
-    $id=set_value('id');
-    $name=set_value('name');
+    $faktur=set_value('faktur');
+    $tanggal=set_value('tanggal');
+    $sups=set_value('supplier');
+    $barang=set_value('barang');
+    $barang_id=set_value('barang_id');
     $stok=set_value('stok');
     $isi=set_value('isi');
     $kats=set_value('kategori');
     $sats=set_value('satuan');
     $buy=set_value('buy');
-    $sell=set_value('sell');
-    //$exp=set_value('exp');
     $exp=date('d-m-Y',strtotime("+1 year"));
 }else{
     //print_r($rec);die;
     $idRec=$rec[0]->id;
-    $id=$rec[0]->id_barang;
-    $name=$rec[0]->nama;
+    $faktur=$rec[0]->faktur;
+    $tanggal=date("d-m-Y",strtotime($rec[0]->tanggal));
+    $sups=$rec[0]->supplier_id;
+    $barang=$rec[0]->barang_name;
+    $barang_id=$rec[0]->barang_id;
     $stok=$rec[0]->stok;
     $isi=$rec[0]->isi;
     $kats=$rec[0]->kategori;
     $sats=$rec[0]->satuan;
     $buy=$rec[0]->harga_beli;
-    $sell=$rec[0]->harga_jual;
-    $exp=date("d-m-Y",strtotime($rec[0]->expired));
+    
 }
 ?>
 <div class="container-fluid">
@@ -31,11 +34,11 @@ if(sizeof($rec)==0){
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header" data-background-color="purple">
-                    <h4 class="title">Form Barang</h4>
+                    <h4 class="title">Form Beli</h4>
                     <p class="category">Lengkapi isi field</p>
                 </div>
                 <div class="card-content">
-                    <form method="post" action="<?php echo base_url().'core/savebarang';?>">
+                    <form method="post" action="<?php echo base_url().'core/savebeli';?>">
                         <?php
                         if(validation_errors()){ ?>
                             <div class="alert alert-danger">
@@ -48,15 +51,41 @@ if(sizeof($rec)==0){
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group label-floating">
-                                    <label class="control-label">ID Barang</label>
-                                    <input type="text" class="form-control" name="id" value="<?php echo $id; ?>">
+                                    <label class="control-label">Faktur</label>
+                                    <input type="text" class="form-control" name="faktur" value="<?php echo $faktur; ?>">
                                     <input type="hidden" name="idRec" value="<?php echo $idRec; ?>">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group label-floating">
-                                    <label class="control-label">Nama Barang</label>
-                                    <input type="text" class="form-control" name="name" value="<?php echo $name; ?>">
+                                    <label class="control-label">Tanggal Beli</label>
+                                    <input type="text" class="form-control tgl" name="tanggal" value="<?php echo $tanggal; ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Supplier</label>
+                                    <select class="form-control" name="supplier">
+                                        <option value=""></option>
+                                        <?php foreach($supplier as $sup){ 
+                                            if($sup->id==$sups){
+                                                $selected="selected";
+                                            }else{
+                                                $selected="";
+                                            }
+                                            ?>
+                                        <option value="<?php echo $sup->id; ?>" <?php echo $selected; ?>><?php echo $sup->nama; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Barang</label>
+                                    <input type="text" class="form-control" name="barang" id="barang" value="<?php echo $barang; ?>">
+                                    <input type="hidden" name="barang_id" id="barang_id" value="<?php echo $barang_id; ?>">
                                 </div>
                             </div>
                         </div>
@@ -105,24 +134,11 @@ if(sizeof($rec)==0){
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group label-floating">
-                                    <label class="control-label">Kadaluarsa</label>
-                                    <input type="text" class="form-control tgl" name="exp" value="<?php echo $exp; ?>">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group label-floating">
                                     <label class="control-label">Harga beli</label>
                                     <input type="text" class="form-control" name="buy" value="<?php echo $buy; ?>">
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Harga jual</label>
-                                    <input type="text" class="form-control" name="sell" value="<?php echo $sell; ?>">
-                                </div>
-                            </div>
+                            
                         </div>
                         <div class="row">
                             <div class="col-md-6">
