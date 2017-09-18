@@ -420,11 +420,17 @@ class Core extends CI_Controller {
         $data['menu']=$this->menu;
         $data['menu_id']="1";
         $beli=$this->basedata->getDashBeliM();
+        $jual=$this->basedata->getDashJualM();
         foreach($beli as $b){
             $labels[]=date('j M',strtotime($b->tanggal));
             $series[]=$b->jumlah;
         }
+        foreach($jual as $j){
+            $labelsA[]=date('j M',strtotime($j->tanggal));
+            $seriesA[]=$j->total;
+        }
         $data['dataBeli']=json_encode(array("labels"=>$labels,"series"=>array($series)));
+        $data['dataJual']=json_encode(array("labels"=>$labelsA,"series"=>array($seriesA)));
         //echo json_encode($dataBeli);die;
         $this->tempe->load('modul','dashboard',$data);
     }

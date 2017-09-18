@@ -341,9 +341,23 @@ class Basedata extends CI_Model {
 	return $harga;
     }
     function getDashBeliM(){
-        $query=$this->db->query("SELECT tanggal,jumlah 
-                FROM pembelian
-                WHERE tanggal BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND NOW()");
+        $query=$this->db->query("SELECT a.tanggal,
+        (SELECT SUM(b.jumlah)
+        FROM pembelian b
+        WHERE b.tanggal =a.tanggal) as jumlah 
+        FROM pembelian a
+        WHERE a.tanggal BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND NOW()
+        GROUP BY a.tanggal");
+        return $query->result();
+    }
+    function getDashJualM(){
+        $query=$this->db->query("SELECT a.tanggal,
+        (SELECT SUM(b.total)
+        FROM jual b
+        WHERE b.tanggal =a.tanggal) as total 
+        FROM jual a
+        WHERE a.tanggal BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND NOW()
+        GROUP BY a.tanggal");
         return $query->result();
     }
     /*---------------------end beli---------------*/

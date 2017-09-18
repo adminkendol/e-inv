@@ -175,8 +175,23 @@
             $(this).datepicker('hide');
         });
         if (lastPath=="dashboard"){
+            dataDailySalesChart=<?php echo $dataJual; ?>;
+            optionsDailySalesChart = {
+                lineSmooth: Chartist.Interpolation.cardinal({
+                    tension: 0
+                }),
+                low: 0,
+                chartPadding: {
+                    top: 20,
+                    right: 0,
+                    bottom: 0,
+                    left: 30
+                }
+            };
+            var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
+            md.startAnimationForLineChart(dailySalesChart);
+        
             dataCompletedTasksChart =$.parseJSON(JSON.stringify(<?php echo $dataBeli; ?>));
-            //alert(dataCompletedTasksChart.series.split(','));
             console.log("dash:"+JSON.stringify(dataCompletedTasksChart));
             optionsCompletedTasksChart = {
                 low: 0,

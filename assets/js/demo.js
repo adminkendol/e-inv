@@ -49,7 +49,7 @@ demo = {
 
         /* ----------==========     Daily Sales Chart initialization    ==========---------- */
 
-        dataDailySalesChart = {
+        /*dataDailySalesChart = {
             labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
             series: [
                 [12, 17, 7, 17, 23, 18, 38]
@@ -72,7 +72,7 @@ demo = {
 
         var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
 
-        md.startAnimationForLineChart(dailySalesChart);
+        md.startAnimationForLineChart(dailySalesChart);*/
 
 
 
