@@ -71,7 +71,7 @@
 		}, "") + "." + p[1];
 	}
 	function remTable(id){
-		$( "#infodlg" ).html("HANYA UNTUK VERSI BERBAYAR");
+		$( "#infodlg" ).html("Fitur ini masih dalam pembuatan");
 		$( "#infodlg" ).dialog({ title:"Info...", draggable: false,modal: true});
 	}
 	function save(){
