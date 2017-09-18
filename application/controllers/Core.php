@@ -15,6 +15,9 @@ class Core extends CI_Controller {
         $this->menu=$this->basedata->getMenu();
         $last = $this->uri->total_segments();
         $this->record = $this->uri->segment($last);
+        if(!$this->session->userdata('nama')){
+            $this->login();
+        }
     }
     function index($limit='',$offset=''){	
             /*$this->load->model("init"); 
@@ -439,7 +442,45 @@ class Core extends CI_Controller {
     
     /*---------------------end dashboard--------------------------------*/
     
-    
+    public function login(){
+        $data['title']=$this->title;
+        $data['headtitle']="Login";
+        $data['menu']=$this->menu;
+        $data['menu_id']="0";
+        $data['valid']="0";
+        $this->tempe->load('modul','login',$data);
+    }
+    public function enter(){
+        $data['title']=$this->title;
+        $data['headtitle']="Login";
+        $data['menu']=$this->menu;
+        $data['menu_id']="0";
+        $data['valid']="0";
+        $post=$this->input->post();
+        $this->form_validation->set_rules('username', 'Username', 'required');
+        $this->form_validation->set_rules('password', 'Password', 'required');
+        if ($this->form_validation->run() == FALSE){
+            $this->tempe->load('modul','login',$data);
+        }else{
+            $result=$this->basedata->cekLogin($post);
+            if(sizeof($result)>0){
+                $data['valid']="0";
+                $arraydata = array(
+                    'nama'  => $result[0]->nama,
+                    'role'  => $result[0]->role
+                );
+                $this->session->set_userdata($arraydata);
+                redirect('core/dashboard', 'refresh');
+            }else{
+                $data['valid']="1";
+                $this->tempe->load('modul','login',$data);
+            }
+        }
+    }
+    public function destroy(){
+        $this->session->sess_destroy();
+        $this->login();
+    }
     public function error(){
         $data['title']=$this->title;
         $data['headtitle']="Error";

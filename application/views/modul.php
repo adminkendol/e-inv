@@ -89,6 +89,11 @@
                                     <i class="material-icons">person</i>
                                     <p class="hidden-lg hidden-md">Profile</p>
                                 </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="<?php echo base_url().'core/destroy'; ?>">Logout</a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                         <form class="navbar-form navbar-right" role="search">
