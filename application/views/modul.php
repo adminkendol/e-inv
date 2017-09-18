@@ -162,7 +162,9 @@
 <script src="<?php echo base_url(); ?>assets/js/fire.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-
+       var path =window.location.pathname.split('/');
+       var lastPath=path[path.length - 1];
+       //alert(lastPath);
         // Javascript method's body can be found in assets/js/demos.js
         demo.initDashboardPageCharts();
         $('.tgl')
@@ -172,31 +174,29 @@
         }).on('changeDate', function (ev) {
             $(this).datepicker('hide');
         });
-        /*$("#barang").autocomplete({
-          source: '<?php echo base_url()."core/apibrg?query="; ?>'+$(this).val(),
-          minLength: 2,
-          delay: 1,
-          select: function( event, ui ) {
-            if (ui.item) {
-              console.log("Selected: " + ui.item.id + " aka " + ui.item.label);
-              $(this).val(ui.item.label);
-              $('#barang_id').val(ui.item.id);
-            } else {
-              // "Nothing selected, input was " + this.value );
-            }
-            return false;
-          }
-        });*/
-
+        if (lastPath=="dashboard"){
+            dataCompletedTasksChart =$.parseJSON(JSON.stringify(<?php echo $dataBeli; ?>));
+            //alert(dataCompletedTasksChart.series.split(','));
+            console.log("dash:"+JSON.stringify(dataCompletedTasksChart));
+            optionsCompletedTasksChart = {
+                low: 0,
+                chartPadding: {
+                    top: 20,
+                    right: 0,
+                    bottom: 0,
+                    left: 0
+                }
+            };
+            var completedTasksChart = new Chartist.Line('#completedTasksChart', dataCompletedTasksChart, optionsCompletedTasksChart);
+            md.startAnimationForLineChart(completedTasksChart);
+        }
     });
     $('#barang').bootcomplete({
         url:'<?php echo base_url()."core/apibrg"; ?>',
         minLength:2
     });
-    /*function check(){
-          alert("Input box changed");
-          // Things to do when the textbox changes
-     }*/
+    
+     
 </script>
 
 </html>

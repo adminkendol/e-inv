@@ -33,13 +33,6 @@ class Core extends CI_Controller {
             }*/
             $this->dashboard();
     }
-    public function dashboard(){
-        $data['title']=$this->title;
-        $data['headtitle']="Dashboard";
-        $data['menu']=$this->menu;
-        $data['menu_id']="1";
-        $this->tempe->load('modul','dashboard',$data);
-    }
     /*--------------supplier-----------------------------*/
     public function supplier(){
         $data['title']=$this->title;
@@ -419,6 +412,25 @@ class Core extends CI_Controller {
     function refreshDetail(){
 	$this->basedata->refreshDetail();
     }
+    
+    /*---------------------dashboard--------------------------------*/
+    public function dashboard(){
+        $data['title']=$this->title;
+        $data['headtitle']="Dashboard";
+        $data['menu']=$this->menu;
+        $data['menu_id']="1";
+        $beli=$this->basedata->getDashBeliM();
+        foreach($beli as $b){
+            $labels[]=date('j M',strtotime($b->tanggal));
+            $series[]=$b->jumlah;
+        }
+        $data['dataBeli']=json_encode(array("labels"=>$labels,"series"=>array($series)));
+        //echo json_encode($dataBeli);die;
+        $this->tempe->load('modul','dashboard',$data);
+    }
+    
+    /*---------------------end dashboard--------------------------------*/
+    
     
     public function error(){
         $data['title']=$this->title;

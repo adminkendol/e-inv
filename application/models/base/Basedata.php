@@ -340,6 +340,12 @@ class Basedata extends CI_Model {
 	}
 	return $harga;
     }
+    function getDashBeliM(){
+        $query=$this->db->query("SELECT tanggal,jumlah 
+                FROM pembelian
+                WHERE tanggal BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND NOW()");
+        return $query->result();
+    }
     /*---------------------end beli---------------*/
     
     

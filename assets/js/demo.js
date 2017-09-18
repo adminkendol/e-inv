@@ -78,7 +78,7 @@ demo = {
 
         /* ----------==========     Completed Tasks Chart initialization    ==========---------- */
 
-        dataCompletedTasksChart = {
+        /*dataCompletedTasksChart = {
             labels: ['12am', '3pm', '6pm', '9pm', '12pm', '3am', '6am', '9am'],
             series: [
                 [230, 750, 450, 300, 280, 240, 200, 190]
@@ -103,7 +103,7 @@ demo = {
 
         // start animation for the Completed Tasks Chart - Line Chart
         md.startAnimationForLineChart(completedTasksChart);
-
+*/
 
         /* ----------==========     Emails Subscription Chart initialization    ==========---------- */
 
