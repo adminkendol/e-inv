@@ -1,3 +1,9 @@
+<script>
+    function remTable(id){
+        $( "#infodlg" ).html("Fitur ini masih dalam pembuatan");
+	$( "#infodlg" ).dialog({ title:"Info...", draggable: false,modal: true});
+    }
+</script>
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12 col-md-12">
@@ -27,7 +33,7 @@
                                 <td>
                                     <a type="button" href="<?php echo base_url().'core/editbeli/'.$s->id; ?>" class="btn-sm btn-primary">Detail</a>
                                     <a type="button" href="<?php echo base_url().'core/editbeli/'.$s->id; ?>" class="btn-sm btn-warning">Print</a>
-                                    <a type="button" href="<?php echo base_url().'core/rembeli/'.$s->id; ?>" class="btn-sm btn-danger">Hapus</a>
+                                    <a type="button" onclick="return remTable(<?php echo $s->id; ?>)" href="#" class="btn-sm btn-danger">Hapus</a>
                                 </td>
                             </tr>
                             <?php } ?>

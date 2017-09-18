@@ -21,6 +21,7 @@
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'>
     <!--<link rel="stylesheet" href="<?php echo base_url();?>assets/css/themes/jquery.ui.dialog.css" type="text/css" />-->
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/css/themes/jquery.ui.all.css" type="text/css" />
 </head>
 
 <body>

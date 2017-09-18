@@ -1,7 +1,7 @@
       <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-   <link rel="stylesheet" href="<?php echo base_url();?>assets/css/themes/jquery.ui.all.css" type="text/css" />
+   
   	<script>
 	/*$(document).ready(function() {
             $( ".datepicker" ).datepicker();
