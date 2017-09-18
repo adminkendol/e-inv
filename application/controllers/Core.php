@@ -430,7 +430,9 @@ class Core extends CI_Controller {
             $seriesA[]=$j->total;
         }
         $data['dataBeli']=json_encode(array("labels"=>$labels,"series"=>array($series)));
+        $data['dataMaxBeli']=max($series);
         $data['dataJual']=json_encode(array("labels"=>$labelsA,"series"=>array($seriesA)));
+        $data['dataMaxJual']="RP".number_format(max($seriesA),2,',','.');
         //echo json_encode($dataBeli);die;
         $this->tempe->load('modul','dashboard',$data);
     }

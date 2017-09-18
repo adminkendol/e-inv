@@ -61,12 +61,13 @@
                 <div class="card-content">
                     <h4 class="title">Penjualan</h4>
                     <p class="category">
-                        <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase in today sales.
+                        <!--<span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase in today sales.-->
+                        <span class="text-success">Penjualan tertinggi <?=$dataMaxJual?></span>
                     </p>
                 </div>
                 <div class="card-footer">
                     <div class="stats">
-                        <i class="material-icons">access_time</i> updated 4 minutes ago
+                        <i class="material-icons">access_time</i> Data 7 Hari sebelumnya
                     </div>
                 </div>
             </div>
@@ -94,11 +95,13 @@
                 </div>
                 <div class="card-content">
                     <h4 class="title">Pembelian</h4>
-                    <p class="category">Last Campaign Performance</p>
+                    <p class="category">
+                        <span class="text-danger">Item tertinggi <?=$dataMaxBeli?></span>
+                    </p>
                 </div>
                 <div class="card-footer">
                     <div class="stats">
-                        <i class="material-icons">access_time</i> campaign sent 2 days ago
+                        <i class="material-icons">access_time</i> Data 7 Hari sebelumnya
                     </div>
                 </div>
             </div>
