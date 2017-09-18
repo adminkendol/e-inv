@@ -10,7 +10,7 @@
                     <p class="category">Masukan user dan password</p>
                 </div>
                 <div class="card-content">
-                    <form method="post" action="<?php echo base_url().'core/enter';?>">
+                    <form method="post" action="<?php echo base_url().'login/enter';?>">
                         <?php
                         if(validation_errors()){ ?>
                             <div class="alert alert-danger">

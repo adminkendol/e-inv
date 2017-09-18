@@ -91,7 +91,7 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="<?php echo base_url().'core/destroy'; ?>">Logout</a>
+                                        <a href="<?php echo base_url().'login/destroy'; ?>">Logout</a>
                                     </li>
                                 </ul>
                             </li>
