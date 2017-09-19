@@ -107,4 +107,24 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header card-chart" data-background-color="grey">
+                    <div class="ct-chart" id="dailyPieBrg"></div>
+                </div>
+                <div class="card-content">
+                    <h4 class="title">Penjualan Barang</h4>
+                    <p class="category">
+                        <span class="text-success">Penjualan tertinggi <?=$dataMaxBrgJual?></span>
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                        <i class="material-icons">access_time</i> Data 7 Hari sebelumnya
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

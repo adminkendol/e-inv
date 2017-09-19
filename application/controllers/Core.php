@@ -2,42 +2,22 @@
 
 class Core extends CI_Controller {
  
-    var $limit=10;
-    var $offset=10;
     function __construct(){
-        //session_start(); //mengadakan session
-	parent::__construct();
+        parent::__construct();
 	if(!$this->session->userdata('nama')){
             redirect('login');
         }
-        
         $this->config->load('config', true);
         $this->config->load('pagination', TRUE);
         $this->title = $this->config->item('title');
-        // access pagination settings
         $this->settings = $this->config->item('pagination');
         $this->load->model(array('base/basedata'));
         $this->menu=$this->basedata->getMenu();
         $last = $this->uri->total_segments();
         $this->record = $this->uri->segment($last);
-        //$this->ceklogin();
     }
-    function index($limit='',$offset=''){	
-            /*$this->load->model("init"); 
-            $this->init->getLasturl();
-            $this->load->model("dashboard_model");
-            if($this->session->userdata('LOGIN')=='TRUE'){
-                $data['judul']='';
-                $data['bulan']=$this->dashboard_model->bulan();
-                $data['tahun']=$this->dashboard_model->tahun();
-            	 
-                $data['view']='dashboard';
-                $this->load->view('index',$data); 
-                    
-            } else {
-                    redirect('core/loginPage');		
-            }*/
-            $this->dashboard();
+    function index(){	
+        $this->dashboard();
     }
     /*--------------supplier-----------------------------*/
     public function supplier(){
@@ -429,6 +409,7 @@ class Core extends CI_Controller {
         $data['menu_id']="1";
         $beli=$this->basedata->getDashBeliM();
         $jual=$this->basedata->getDashJualM();
+        $brgJual=$this->basedata->getDashBrgJualM();
         foreach($beli as $b){
             $labels[]=date('j M',strtotime($b->tanggal));
             $series[]=$b->jumlah;
@@ -437,11 +418,17 @@ class Core extends CI_Controller {
             $labelsA[]=date('j M',strtotime($j->tanggal));
             $seriesA[]=$j->total;
         }
+        foreach($brgJual as $bj){
+            $labelsB[]=$bj->nama;
+            $seriesB[]=$bj->total;
+            $dataPie[]=array($bj->nama,intval($bj->total));
+        }
         $data['dataBeli']=json_encode(array("labels"=>$labels,"series"=>array($series)));
         $data['dataMaxBeli']=max($series);
         $data['dataJual']=json_encode(array("labels"=>$labelsA,"series"=>array($seriesA)));
         $data['dataMaxJual']="RP".number_format(max($seriesA),2,',','.');
-        //echo json_encode($dataBeli);die;
+        $data['dataBrgJual']=json_encode($dataPie);
+        $data['dataMaxBrgJual']="RP".number_format(max($seriesB),2,',','.');
         $this->tempe->load('modul','dashboard',$data);
     }
     

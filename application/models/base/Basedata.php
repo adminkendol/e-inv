@@ -360,6 +360,17 @@ class Basedata extends CI_Model {
         GROUP BY a.tanggal");
         return $query->result();
     }
+    function getDashBrgJualM(){
+        $query=$this->db->query("SELECT a.barang,bar.nama,
+        (SELECT SUM(b.total)
+        FROM jual b
+        WHERE b.barang =a.barang) as total 
+        FROM jual a
+        INNER JOIN barang bar on bar.id_barang=a.barang
+        WHERE a.tanggal BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND NOW()
+        GROUP BY a.barang");
+        return $query->result();
+    }
     /*---------------------end beli---------------*/
     
     /*-----------------------login------------------*/

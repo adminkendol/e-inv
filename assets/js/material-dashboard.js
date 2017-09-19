@@ -240,7 +240,28 @@ md = {
         });
 
         seq2 = 0;
+    },
+    
+    startAnimationForPieChart: function(chart) {
+
+        chart.on('draw', function(data) {
+            if (data.type === 'pie') {
+                seq2++;
+                data.element.animate({
+                    opacity: {
+                        begin: seq2 * delays2,
+                        dur: durations2,
+                        from: 0,
+                        to: 1,
+                        easing: 'ease'
+                    }
+                });
+            }
+        });
+
+        seq2 = 0;
     }
+    
 }
 
 

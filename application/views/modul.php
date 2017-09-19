@@ -163,14 +163,17 @@
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
 <script src="<?php echo base_url(); ?>assets/js/bootstrap-datepicker.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/jquery.bootcomplete.js"></script>
+<script src="<?php echo base_url(); ?>assets/carts/highcharts.js"></script>
+<script src="<?php echo base_url(); ?>assets/carts/highcharts-3d.js"></script>
+<script src="<?php echo base_url(); ?>assets/carts/modules/exporting.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/demo.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/fire.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/charts.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
        var path =window.location.pathname.split('/');
        var lastPath=path[path.length - 1];
-       //alert(lastPath);
-        // Javascript method's body can be found in assets/js/demos.js
+       // Javascript method's body can be found in assets/js/demos.js
         demo.initDashboardPageCharts();
         $('.tgl')
         .datepicker({
@@ -208,8 +211,16 @@
                 }
             };
             var completedTasksChart = new Chartist.Line('#completedTasksChart', dataCompletedTasksChart, optionsCompletedTasksChart);
-            md.startAnimationForLineChart(completedTasksChart);
+            md.startAnimationForPieChart(completedTasksChart);
+            
+            var datas= <?php echo $dataBrgJual; ?>;
+            var dom = 'dailyPieBrg';
+            var judul = 'Penjualan perminggu';
+            var pointer = 'Barang dalam pejualan';
+            charts.pie(datas,dom,judul,pointer);
         }
+        
+        console.log("pie:"+JSON.stringify(datas));
     });
     $('#barang').bootcomplete({
         url:'<?php echo base_url()."core/apibrg"; ?>',
