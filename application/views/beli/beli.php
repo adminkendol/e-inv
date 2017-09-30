@@ -1,6 +1,6 @@
 <script>
     function remTable(id){
-        $( "#infodlg" ).html("Fitur ini masih dalam pembuatan");
+        $( "#infodlg" ).html("Anda tidak berhak menghapus");
 	$( "#infodlg" ).dialog({ title:"Info...", draggable: false,modal: true});
     }
 </script>
@@ -10,7 +10,7 @@
             <div class="card">
                 <div class="card-header" data-background-color="orange">
                     <h4 class="title">Pembelian Stats</h4>
-                    <a type="button" href="<?php echo base_url().'core/addbeli/'; ?>" class="btn btn-primary pull-right">Tambah Pembelian</a>
+                    <a type="button" href="<?php echo base_url().'core/addbeli'; ?>" class="btn btn-primary pull-right">Tambah Pembelian</a>
                 </div>
                 <div class="card-content table-responsive">
                     <table class="table table-hover">
@@ -18,7 +18,6 @@
                             <th>Faktur</th>
                             <th>Tanggal Beli</th>
                             <th>Supplier</th>
-                            <th>Barang</th>
                             <th>Total Harga</th>
                             <th></th>
                         </thead>
@@ -27,12 +26,11 @@
                             <tr>
                                 <td><?php echo $s->faktur; ?></td>
                                 <td><?php echo date("d-m-Y",strtotime($s->tanggal)); ?></td>
-                                <td><?php echo $s->sups; ?></td>
-                                <td><?php echo $s->bars; ?></td>
+                                <td><?php echo $s->sup_nama; ?></td>
                                 <td><?php echo number_format($s->total,2,',','.'); ?></td>
                                 <td>
                                     <a type="button" href="<?php echo base_url().'core/editbeli/'.$s->id; ?>" class="btn-sm btn-primary">Detail</a>
-                                    <a type="button" href="<?php echo base_url().'core/editbeli/'.$s->id; ?>" class="btn-sm btn-warning">Print</a>
+                                    <a type="button" href="<?php echo base_url().'core/printfo/'.$s->id; ?>" class="btn-sm btn-warning">Print</a>
                                     <a type="button" onclick="return remTable(<?php echo $s->id; ?>)" href="#" class="btn-sm btn-danger">Hapus</a>
                                 </td>
                             </tr>

@@ -43,6 +43,7 @@ class Login extends CI_Controller {
             if(sizeof($result)>0){
                 $data['valid']="0";
                 $arraydata = array(
+                    'id'  => $result[0]->id,
                     'nama'  => $result[0]->nama,
                     'role'  => $result[0]->role
                 );

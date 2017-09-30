@@ -1,56 +1,39 @@
 <?php  
 
-class Core extends CI_Controller {
+class Core extends Main_Controller {
  
     function __construct(){
         parent::__construct();
-	if(!$this->session->userdata('nama')){
-            redirect('login');
-        }
-        $this->config->load('config', true);
-        $this->config->load('pagination', TRUE);
-        $this->title = $this->config->item('title');
-        $this->settings = $this->config->item('pagination');
-        $this->load->model(array('base/basedata'));
-        $this->menu=$this->basedata->getMenu();
-        $last = $this->uri->total_segments();
-        $this->record = $this->uri->segment($last);
+	
     }
     function index(){	
         $this->dashboard();
     }
     /*--------------supplier-----------------------------*/
     public function supplier(){
-        $data['title']=$this->title;
-        $data['headtitle']="Supplier";
-        $data['menu']=$this->menu;
-        $data['menu_id']="5";
+        $this->data['headtitle']="Supplier";
+        $this->data['menu_id']="5";
         $id="all";
-        $data['supplier']=$this->basedata->getSupplier($id);
-        $this->tempe->load('modul','supplier/supplier',$data);
+        $this->data['supplier']=$this->basedata->getSupplier($id);
+        $this->tempe->load('modul','supplier/supplier',$this->data);
     }
     public function addsupplier(){
-        $data['title']=$this->title;
-        $data['headtitle']="Supplier";
-        $data['menu']=$this->menu;
-        $data['menu_id']="5";
-        $data['rec']=array();
-        $this->tempe->load('modul','supplier/form',$data);
+        $this->data['headtitle']="Supplier";
+        $this->data['menu_id']="5";
+        $this->data['rec']=array();
+        $this->tempe->load('modul','supplier/form',$this->data);
     }
     public function savesupplier(){
         $post=$this->input->post();
-        //print_r($post);
-        $data['title']=$this->title;
-        $data['headtitle']="Supplier";
-        $data['menu']=$this->menu;
-        $data['menu_id']="5";
-        $data['rec']=array();
+        $this->data['headtitle']="Supplier";
+        $this->data['menu_id']="5";
+        $this->data['rec']=array();
         $this->form_validation->set_rules('id', 'ID Supplier', 'required');
         $this->form_validation->set_rules('name', 'Nama Supplier', 'required');
         $this->form_validation->set_rules('alamat', 'Alamat Supplier', 'required');
         $this->form_validation->set_rules('phone', 'No telepon Supplier', 'required');
         if ($this->form_validation->run() == FALSE){
-            $this->tempe->load('modul','supplier/form',$data);
+            $this->tempe->load('modul','supplier/form',$this->data);
         }else{
             $this->basedata->setSupplier($post);
             redirect('core/supplier', 'refresh');
@@ -58,12 +41,10 @@ class Core extends CI_Controller {
     }
     public function editsupplier(){
         $rec=$this->basedata->getSupplier($this->record);
-        $data['title']=$this->title;
-        $data['headtitle']="Supplier";
-        $data['menu']=$this->menu;
-        $data['menu_id']="5";
-        $data['rec']=$rec;
-        $this->tempe->load('modul','supplier/form',$data);
+        $this->data['headtitle']="Supplier";
+        $this->data['menu_id']="5";
+        $this->data['rec']=$rec;
+        $this->tempe->load('modul','supplier/form',$this->data);
     }
     public function remsupplier(){
         $this->basedata->delSupplier($this->record);
@@ -73,33 +54,27 @@ class Core extends CI_Controller {
     
     /*--------------kategori-----------------------------*/
     public function kategori(){
-        $data['title']=$this->title;
-        $data['headtitle']="Kategori";
-        $data['menu']=$this->menu;
-        $data['menu_id']="6";
+        $this->data['headtitle']="Kategori";
+        $this->data['menu_id']="6";
         $id="all";
-        $data['kategori']=$this->basedata->getKategori($id);
-        $this->tempe->load('modul','kategori/kategori',$data);
+        $this->data['kategori']=$this->basedata->getKategori($id);
+        $this->tempe->load('modul','kategori/kategori',$this->data);
     }
     public function addkategori(){
-        $data['title']=$this->title;
-        $data['headtitle']="Kategori";
-        $data['menu']=$this->menu;
-        $data['menu_id']="6";
-        $data['rec']=array();
-        $this->tempe->load('modul','kategori/form',$data);
+        $this->data['headtitle']="Kategori";
+        $this->data['menu_id']="6";
+        $this->data['rec']=array();
+        $this->tempe->load('modul','kategori/form',$this->data);
     }
     public function savekategori(){
         $post=$this->input->post();
-        $data['title']=$this->title;
-        $data['headtitle']="Kategori";
-        $data['menu']=$this->menu;
-        $data['menu_id']="6";
-        $data['rec']=array();
+        $this->data['headtitle']="Kategori";
+        $this->data['menu_id']="6";
+        $this->data['rec']=array();
         $this->form_validation->set_rules('id', 'ID Kategori', 'required');
         $this->form_validation->set_rules('kategori', 'Kategori', 'required');
         if ($this->form_validation->run() == FALSE){
-            $this->tempe->load('modul','kategori/form',$data);
+            $this->tempe->load('modul','kategori/form',$this->data);
         }else{
             $this->basedata->setKategori($post);
             redirect('core/kategori', 'refresh');
@@ -107,12 +82,10 @@ class Core extends CI_Controller {
     }
     public function editkategori(){
         $rec=$this->basedata->getKategori($this->record);
-        $data['title']=$this->title;
-        $data['headtitle']="Kategori";
-        $data['menu']=$this->menu;
-        $data['menu_id']="6";
-        $data['rec']=$rec;
-        $this->tempe->load('modul','kategori/form',$data);
+        $this->data['headtitle']="Kategori";
+        $this->data['menu_id']="6";
+        $this->data['rec']=$rec;
+        $this->tempe->load('modul','kategori/form',$this->data);
     }
     public function remkategori(){
         $this->basedata->delKategori($this->record);
@@ -122,33 +95,27 @@ class Core extends CI_Controller {
     
     /*--------------satuan-----------------------------*/
     public function satuan(){
-        $data['title']=$this->title;
-        $data['headtitle']="Satuan";
-        $data['menu']=$this->menu;
-        $data['menu_id']="7";
+        $this->data['headtitle']="Satuan";
+        $this->data['menu_id']="7";
         $id="all";
-        $data['satuan']=$this->basedata->getSatuan($id);
-        $this->tempe->load('modul','satuan/satuan',$data);
+        $this->data['satuan']=$this->basedata->getSatuan($id);
+        $this->tempe->load('modul','satuan/satuan',$this->data);
     }
     public function addsatuan(){
-        $data['title']=$this->title;
-        $data['headtitle']="Satuan";
-        $data['menu']=$this->menu;
-        $data['menu_id']="7";
-        $data['rec']=array();
-        $this->tempe->load('modul','satuan/form',$data);
+        $this->data['headtitle']="Satuan";
+        $this->data['menu_id']="7";
+        $this->data['rec']=array();
+        $this->tempe->load('modul','satuan/form',$this->data);
     }
     public function savesatuan(){
         $post=$this->input->post();
-        $data['title']=$this->title;
-        $data['headtitle']="Satuan";
-        $data['menu']=$this->menu;
-        $data['menu_id']="7";
-        $data['rec']=array();
+        $this->data['headtitle']="Satuan";
+        $this->data['menu_id']="7";
+        $this->data['rec']=array();
         $this->form_validation->set_rules('id', 'ID Satuan', 'required');
         $this->form_validation->set_rules('satuan', 'Satuan', 'required');
         if ($this->form_validation->run() == FALSE){
-            $this->tempe->load('modul','satuan/form',$data);
+            $this->tempe->load('modul','satuan/form',$this->data);
         }else{
             $this->basedata->setSatuan($post);
             redirect('core/satuan', 'refresh');
@@ -156,12 +123,10 @@ class Core extends CI_Controller {
     }
     public function editsatuan(){
         $rec=$this->basedata->getSatuan($this->record);
-        $data['title']=$this->title;
-        $data['headtitle']="Satuan";
-        $data['menu']=$this->menu;
-        $data['menu_id']="7";
-        $data['rec']=$rec;
-        $this->tempe->load('modul','satuan/form',$data);
+        $this->data['headtitle']="Satuan";
+        $this->data['menu_id']="7";
+        $this->data['rec']=$rec;
+        $this->tempe->load('modul','satuan/form',$this->data);
     }
     public function remsatuan(){
         $this->basedata->delSatuan($this->record);
@@ -171,25 +136,21 @@ class Core extends CI_Controller {
     
     /*--------------tax-----------------------------*/
     public function tax(){
-        $data['title']=$this->title;
-        $data['headtitle']="Tax";
-        $data['menu']=$this->menu;
-        $data['menu_id']="8";
+        $this->data['headtitle']="Tax";
+        $this->data['menu_id']="8";
         $id="all";
-        $data['rec']=$this->basedata->getTax($id);
-        $this->tempe->load('modul','tax/form',$data);
+        $this->data['rec']=$this->basedata->getTax($id);
+        $this->tempe->load('modul','tax/form',$this->data);
     }
     public function savetax(){
         $post=$this->input->post();
-        $data['title']=$this->title;
-        $data['headtitle']="Pajak";
-        $data['menu']=$this->menu;
-        $data['menu_id']="8";
+        $this->data['headtitle']="Pajak";
+        $this->data['menu_id']="8";
         $id="all";
-        $data['rec']=$this->basedata->getTax($id);
+        $this->data['rec']=$this->basedata->getTax($id);
         $this->form_validation->set_rules('tax', 'Pajak', 'required');
         if ($this->form_validation->run() == FALSE){
-            $this->tempe->load('modul','tax/form',$data);
+            $this->tempe->load('modul','tax/form',$this->data);
         }else{
             $this->basedata->setTax($post);
             redirect('core/tax', 'refresh');
@@ -199,48 +160,46 @@ class Core extends CI_Controller {
     
     /*--------------barang-----------------------------*/
     public function barang(){
-        //$this->ceklogin();
-        $data['title']=$this->title;
-        $data['headtitle']="Barang";
-        $data['menu']=$this->menu;
-        $data['menu_id']="4";
+        $this->data['headtitle']="Barang";
+        $this->data['menu_id']="4";
         $id="all";
         $this->settings['base_url'] = site_url('core/barang');
         $this->settings['total_rows'] = $this->basedata->count_barang();
         $choice = $this->settings["total_rows"] / $this->settings["per_page"];
         $this->settings["num_links"] = floor($choice);
         $this->pagination->initialize($this->settings);
-        $data['page'] = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $data['pagination'] = $this->pagination->create_links();
-        $data['barang']=$this->basedata->getBarang($id,$this->settings["per_page"], $data['page']);
-        $this->tempe->load('modul','barang/barang',$data);
+        $this->data['page'] = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $this->data['pagination'] = $this->pagination->create_links();
+        $this->data['barang']=$this->basedata->getBarang($id,$this->settings["per_page"], $this->data['page']);
+        $this->tempe->load('modul','barang/barang',$this->data);
     }
     public function apibrg(){
         $name=$this->input->get('query');
         $rec=$this->basedata->getApiBarang($name);
         echo json_encode($rec);
     }
+    public function apiSelBrg(){
+        $id=$this->input->post('id');
+        $selBrg=$this->basedata->generateListObat($id);
+        echo $selBrg;
+    }
     public function addbarang(){
-        $data['title']=$this->title;
-        $data['headtitle']="Barang";
-        $data['menu']=$this->menu;
-        $data['menu_id']="4";
-        $data['rec']=array();
+        $this->data['headtitle']="Barang";
+        $this->data['menu_id']="4";
+        $this->data['rec']=array();
         $id="all";
-        $data['kategori']=$this->basedata->getKategori($id);
-        $data['satuan']=$this->basedata->getSatuan($id);
-        $this->tempe->load('modul','barang/form',$data);
+        $this->data['kategori']=$this->basedata->getKategori($id);
+        $this->data['satuan']=$this->basedata->getSatuan($id);
+        $this->tempe->load('modul','barang/form',$this->data);
     }
     public function savebarang(){
         $post=$this->input->post();
-        $data['title']=$this->title;
-        $data['headtitle']="Barang";
-        $data['menu']=$this->menu;
-        $data['menu_id']="4";
-        $data['rec']=array();
+        $this->data['headtitle']="Barang";
+        $this->data['menu_id']="4";
+        $this->data['rec']=array();
         $id="all";
-        $data['kategori']=$this->basedata->getKategori($id);
-        $data['satuan']=$this->basedata->getSatuan($id);
+        $this->data['kategori']=$this->basedata->getKategori($id);
+        $this->data['satuan']=$this->basedata->getSatuan($id);
         $this->form_validation->set_rules('id', 'ID Barang', 'required');
         $this->form_validation->set_rules('name', 'Barang', 'required');
         $this->form_validation->set_rules('kategori', 'Kategori', 'required');
@@ -251,7 +210,7 @@ class Core extends CI_Controller {
         $this->form_validation->set_rules('sell', 'Harga Beli', 'required');
         $this->form_validation->set_rules('isi', 'Isi', 'required');
         if ($this->form_validation->run() == FALSE){
-            $this->tempe->load('modul','barang/form',$data);
+            $this->tempe->load('modul','barang/form',$this->data);
         }else{
             $this->basedata->setBarang($post);
             redirect('core/barang', 'refresh');
@@ -261,15 +220,13 @@ class Core extends CI_Controller {
         $batas="";
         $offset="";
         $rec=$this->basedata->getBarang($this->record,$batas,$offset);
-        $data['title']=$this->title;
-        $data['headtitle']="Barang";
-        $data['menu']=$this->menu;
-        $data['menu_id']="4";
-        $data['rec']=$rec;
+        $this->data['headtitle']="Barang";
+        $this->data['menu_id']="4";
+        $this->data['rec']=$rec;
         $id="all";
-        $data['kategori']=$this->basedata->getKategori($id);
-        $data['satuan']=$this->basedata->getSatuan($id);
-        $this->tempe->load('modul','barang/form',$data);
+        $this->data['kategori']=$this->basedata->getKategori($id);
+        $this->data['satuan']=$this->basedata->getSatuan($id);
+        $this->tempe->load('modul','barang/form',$this->data);
     }
     public function rembarang(){
         $this->basedata->delBarang($this->record);
@@ -279,10 +236,8 @@ class Core extends CI_Controller {
     
     /*--------------pembelian-----------------------------*/
     public function beli(){
-        $data['title']=$this->title;
-        $data['headtitle']="Pembelian";
-        $data['menu']=$this->menu;
-        $data['menu_id']="2";
+        $this->data['headtitle']="Pembelian";
+        $this->data['menu_id']="2";
         $id="all";
         //pagination settings
         $this->settings['base_url'] = site_url('core/beli');
@@ -290,45 +245,61 @@ class Core extends CI_Controller {
         $choice = $this->settings["total_rows"] / $this->settings["per_page"];
         $this->settings["num_links"] = floor($choice);
         $this->pagination->initialize($this->settings);
-        $data['page'] = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $data['pagination'] = $this->pagination->create_links();
-        $data['beli']=$this->basedata->getBeli($id,$this->settings["per_page"], $data['page']);
-        $this->tempe->load('modul','beli/beli',$data);
+        $this->data['page'] = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $this->data['pagination'] = $this->pagination->create_links();
+        $this->data['beli']=$this->basedata->getBeli($id,$this->settings["per_page"], $this->data['page']);
+        $this->tempe->load('modul','beli/beli',$this->data);
     }
-    /*public function addbeli(){
-        $data['title']=$this->title;
-        $data['headtitle']="Pembelian";
-        $data['menu']=$this->menu;
-        $data['menu_id']="2";
-        $data['rec']=array();
+    public function addbeli(){
+        $this->data['headtitle']="Pembelian";
+        $this->data['menu_id']="2";
+        $this->data['rec']=array();
         $id="all";
-        $data['supplier']=$this->basedata->getSupplier($id);
-        $data['kategori']=$this->basedata->getKategori($id);
-        $data['satuan']=$this->basedata->getSatuan($id);
-        $this->tempe->load('modul','beli/form',$data);
-    }*/
-    function addbeli(){
-        $data['title']=$this->title;
-        $data['headtitle']="Pembelian";
-        $data['menu']=$this->menu;
-        $data['menu_id']="2";
-        $data['rec']=array();
-        $id="all";
-        
-        $data['judul']='Pembelian';
-	$data['view']='beli/form_beli';
-	$data['table']=$this->generateFaktur();
-	//$this->load->view('index',$data);
-        $this->tempe->load('modul','beli/form_beli',$data);
+        $this->data['valid']="0";
+        $this->data['valdata']="";
+        $this->data['supplier']=$this->basedata->getSupplier($id);
+        //$this->data['kategori']=$this->basedata->getKategori($id);
+        //$this->data['satuan']=$this->basedata->getSatuan($id);
+        $this->data['autofaktur']=$this->basedata->autoFakturN();
+        $this->tempe->load('modul','beli/form',$this->data);
     }
     function actbeli(){
         $array=$this->input->post('lstobat');
-	if(count(array_unique($array))<count($array)){
-            echo"Nama Barang Tidak Boleh Sama";
-            return false;
-	}else{
-            $this->basedata->actionbeli();
-	}
+        if($this->input->post('idRec')==""){
+            if(sizeof($array)>0){
+                if(count(array_unique($array))<count($array)){
+                    echo"Nama Barang Tidak Boleh Sama";
+                    return false;
+                }else{
+                    $this->basedata->actionbeli($this->input_by);
+                }
+            }else{
+                echo"Nama Barang Tidak Boleh Kosong";
+                return false;
+            }    
+        }else{
+            $this->basedata->actionbeli($this->input_by);
+        }
+    }
+    public function editbeli(){
+        $this->data['headtitle']="Pembelian";
+        $this->data['menu_id']="2";
+        $this->data['rec']=$this->basedata->getBeli($this->record,"","");
+        $this->data['recOrder']=$this->basedata->getOrder($this->record);
+        $this->data['valid']="0";
+        $this->data['valdata']="";
+        $id="all";
+        $this->data['supplier']=$this->basedata->getSupplier($id);
+        $this->data['autofaktur']=$this->data['rec'][0]->faktur;
+        $this->tempe->load('modul','beli/form',$this->data);
+    }
+    public function printfo(){
+        $this->data['headtitle']="Print Pembelian";
+        $this->data['menu_id']="2";
+        $this->data['rec']=$this->basedata->getBeli($this->record,"","");
+        $this->data['recOrder']=$this->basedata->getOrder($this->record);
+        $this->data['autofaktur']=$this->data['rec'][0]->faktur;
+        $this->tempe->load('modul','beli/print',$this->data);
     }
     function nextForm(){
         $jumbeli=$this->input->post('jumbeli');
@@ -402,44 +373,57 @@ class Core extends CI_Controller {
     
     /*---------------------dashboard--------------------------------*/
     public function dashboard(){
-        //$this->ceklogin();
-        $data['title']=$this->title;
-        $data['headtitle']="Dashboard";
-        $data['menu']=$this->menu;
-        $data['menu_id']="1";
+        
+        $this->data['headtitle']="Dashboard";
+        
+        $this->data['menu_id']="1";
         $beli=$this->basedata->getDashBeliM();
         $jual=$this->basedata->getDashJualM();
         $brgJual=$this->basedata->getDashBrgJualM();
-        foreach($beli as $b){
-            $labels[]=date('j M',strtotime($b->tanggal));
-            $series[]=$b->jumlah;
+        if(sizeof($beli)>0){
+            foreach($beli as $b){
+                $labels[]=date('j M',strtotime($b->tanggal));
+                $series[]=$b->jumlah;
+            }
+        }else{
+            $labels=array();
+            $series=array(0);
         }
-        foreach($jual as $j){
-            $labelsA[]=date('j M',strtotime($j->tanggal));
-            $seriesA[]=$j->total;
+        if(sizeof($jual)>0){
+            foreach($jual as $j){
+                $labelsA[]=date('j M',strtotime($j->tanggal));
+                $seriesA[]=$j->total;
+            }
+        }else{
+            $labelsA=array();
+            $seriesA=array(0);
         }
-        foreach($brgJual as $bj){
-            $labelsB[]=$bj->nama;
-            $seriesB[]=$bj->total;
-            $dataPie[]=array($bj->nama,intval($bj->total));
+        if(sizeof($brgJual)>0){
+            foreach($brgJual as $bj){
+                $labelsB[]=$bj->nama;
+                $seriesB[]=$bj->total;
+                $this->dataPie[]=array($bj->nama,intval($bj->total));
+            }
+        }else{
+            $labelsB=array();
+            $seriesB=array(0);
+            $this->dataPie=array();
         }
-        $data['dataBeli']=json_encode(array("labels"=>$labels,"series"=>array($series)));
-        $data['dataMaxBeli']=max($series);
-        $data['dataJual']=json_encode(array("labels"=>$labelsA,"series"=>array($seriesA)));
-        $data['dataMaxJual']="RP".number_format(max($seriesA),2,',','.');
-        $data['dataBrgJual']=json_encode($dataPie);
-        $data['dataMaxBrgJual']="RP".number_format(max($seriesB),2,',','.');
-        $this->tempe->load('modul','dashboard',$data);
+        $this->data['dataBeli']=json_encode(array("labels"=>$labels,"series"=>array($series)));
+        $this->data['dataMaxBeli']=max($series);
+        $this->data['dataJual']=json_encode(array("labels"=>$labelsA,"series"=>array($seriesA)));
+        $this->data['dataMaxJual']="RP".number_format(max($seriesA),2,',','.');
+        $this->data['dataBrgJual']=json_encode($this->dataPie);
+        $this->data['dataMaxBrgJual']="RP".number_format(max($seriesB),2,',','.');
+        $this->tempe->load('modul','dashboard',$this->data);
     }
     
     /*---------------------end dashboard--------------------------------*/
     
     public function error(){
-        $data['title']=$this->title;
-        $data['headtitle']="Error";
-        $data['menu']=$this->menu;
-        $data['menu_id']="1";
-        $this->tempe->load('modul','error',$data);
+        $this->data['headtitle']="Error";
+        $this->data['menu_id']="1";
+        $this->tempe->load('modul','error',$this->data);
     }
 	 
 	 

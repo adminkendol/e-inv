@@ -185,29 +185,43 @@ class Basedata extends CI_Model {
     /*---------------------beli---------------*/
     public function getBeli($id,$batas,$offset){
         if($id!="all"){
-            $where="WHERE p.id='$id'";
+            $and="AND fak.id='$id'";
         }else{
-            $where="";
+            $and="";
         }
         if($batas==""){
             $limit="";
         }else{
             $limit="LIMIT $offset,$batas";
         }
-        $query=$this->db->query("SELECT p.*,b.nama AS bars,s.nama AS sups 
-                FROM pembelian p
-                LEFT JOIN barang b ON b.id_barang=p.barang
-                LEFT JOIN supplier s ON s.id_supplier=p.supplier 
-                $where ORDER BY id DESC $limit");
+        $query=$this->db->query("SELECT fak.id,fak.faktur,fak.tanggal,sup.nama AS sup_nama,fak.total,fak.target_id,sup.alamat,sup.telepon
+                FROM faktur fak
+                LEFT JOIN supplier sup ON sup.id=fak.target_id 
+                WHERE fak.faktur_type_id='1' $and ORDER BY fak.id DESC $limit");
         log_message('debug', '[QUERY CEK GET BELI:]['.$this->db->last_query().'][RESULT:]['.json_encode($query->result()).']', false);
         return $query->result();
     }
+    public function getOrder($id){
+        $query=$this->db->query("SELECT fo.id,fo.jumlah,fo.barang_id,bar.nama,bar.id_barang,kat.kategori,bar.harga_beli,bar.stok
+                FROM faktur_order fo
+                LEFT JOIN barang bar ON bar.id=fo.barang_id
+                LEFT JOIN kategori kat ON kat.id=bar.kategori
+                WHERE fo.faktur_id='$id'");
+        return $query->result();
+    }
     public function count_beli(){
-        $query = $this->db->get("pembelian")->num_rows();
+        $this->db->where("faktur_type_id","1");
+        $query = $this->db->get("faktur")->num_rows();
         return $query;
     }
     function autoFaktur(){
         $query=$this->db->query("select count(1) as jumlah from pembelian group by sesbeli");
+	$max=$query->num_rows()+1;
+	$menus= ('BELI-FK-'.date('Ymd').'-'.$max);
+	return $menus;
+    }
+    function autoFakturN(){
+        $query=$this->db->query("select count(1) as jumlah from faktur group by sesion");
 	$max=$query->num_rows()+1;
 	$menus= ('BELI-FK-'.date('Ymd').'-'.$max);
 	return $menus;
@@ -291,37 +305,58 @@ class Basedata extends CI_Model {
 		}
             }
     }
-    function actionbeli(){
-        $tanggal=$this->input->post('tanggal');
+    function actionbeli($input_by){
+        $idRec=$this->input->post('idRec');
+        $tanggal=date("Y-m-d",strtotime($this->input->post('tanggal')));
 	$faktur=$this->input->post('faktur');
-	$supplier=$this->input->post('comboSupplier');
+	$supplier=$this->input->post('supplier');
 	$sesbeli=$this->input->post('sesbeli');
 	$i=0;
 	$jumlahBeli=count($this->input->post('jumlah'));
+        $total=$this->input->post('totallHidden');
 	$ljumObat=$this->input->post('jumlah');
-	$lObat=$this->input->post('lstobat');
-		
-	for($i;$i<$jumlahBeli;$i++){
-            $jumObat = $ljumObat[$i];
-            $Obat = $lObat[$i];
-            $getHarga=$this->gethargaobat($Obat,$jumObat);
-			
-            $data=array(
-			 'barang'=>$Obat,
-			 'jumlah'=>$jumObat,
-			 'faktur'=>$faktur,
-			 'tanggal'=>$tanggal,
-			 'supplier'=>$supplier,
-			 'total'=>$getHarga,
-			 'sesbeli'=>$sesbeli,
+        
+        $cek=$this->getBeli($idRec,"","");
+        $lObat=$this->input->post('lstobat');
+        if(sizeof($cek)==0){
+            $data=array('faktur_type_id'=>'1',
+                    'faktur'=>$faktur,
+                    'target_id'=>$supplier,
+                    'tanggal'=>$tanggal,
+                    'total'=>$total,
+                    'sesion'=>$sesbeli,
+                    'input_by'=>$input_by,
+                    'input_date'=>date('Y-m-d h:i:s'));
+            $this->db->insert('faktur',$data);
+            $id=$this->db->insert_id();
+            for($i;$i<$jumlahBeli;$i++){
+                $jumObat = $ljumObat[$i];
+                $Obat = $lObat[$i];
+                $getId=$this->getIdObat($Obat);
+                $data=array(
+			 'faktur_id'=>$id,
+			 'barang_id'=>$getId,
+			 'jumlah'=>$jumObat
 			);
-			 
-			//$this->db->trans_start();
-            $this->db->insert('pembelian',$data);
-			//$this->db->trans_complete();
-            $this->tambahBarang($Obat,$jumObat);
+                $this->db->trans_start();
+                $this->db->insert('faktur_order',$data);
+                $this->db->trans_complete();
+                $this->tambahBarang($Obat,$jumObat);
+            }
+        }else{
+            $data=array('faktur_type_id'=>'1',
+                    'faktur'=>$faktur,
+                    'target_id'=>$supplier,
+                    'tanggal'=>$tanggal,
+                    //'total'=>$total,
+                    //'sesion'=>$sesbeli,
+                    'edit_by'=>$input_by,
+                    'edit_date'=>date('Y-m-d h:i:s'));
+            $this->db->where('id', $idRec);
+            $this->db->update('faktur', $data);
         }
     }
+    
     function tambahBarang($id,$jumObat){
         $query=$this->db->query("select id_barang,stok from barang where id_barang='$id'");
         if ($query->num_rows() > 0) {
@@ -339,6 +374,15 @@ class Basedata extends CI_Model {
             }
 	}
 	return $harga;
+    }
+    function getIdObat($id){
+        $query=$this->db->query("select id  from barang where id_barang='$id'");
+	if ($query->num_rows() > 0) {
+            foreach ($query->result() as $data) {
+                $idObat=$data->id;
+            }
+	}
+	return $idObat;
     }
     function getDashBeliM(){
         $query=$this->db->query("SELECT a.tanggal,
@@ -376,7 +420,7 @@ class Basedata extends CI_Model {
     /*-----------------------login------------------*/
     public function cekLogin($post){
         $pass=md5($post['password']);
-        $query=$this->db->query("SELECT nama,role
+        $query=$this->db->query("SELECT id,nama,role
         FROM t_user
         WHERE username='$post[username]'
         AND password='$pass'");
