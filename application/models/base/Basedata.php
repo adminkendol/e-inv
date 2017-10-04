@@ -220,10 +220,15 @@ class Basedata extends CI_Model {
 	$menus= ('BELI-FK-'.date('Ymd').'-'.$max);
 	return $menus;
     }
-    function autoFakturN(){
-        $query=$this->db->query("select count(1) as jumlah from faktur group by sesion");
+    function autoFakturN($flag){
+        if($flag=="1"){
+            $word="BELI";
+        }else{
+            $word="JUAL";
+        }
+        $query=$this->db->query("select count(1) as jumlah from faktur where faktur_type_id='$flag' group by sesion");
 	$max=$query->num_rows()+1;
-	$menus= ('BELI-FK-'.date('Ymd').'-'.$max);
+	$menus= ($word.'-FK-'.date('Ymd').'-'.$max);
 	return $menus;
     }
     function generateListBeli(){
@@ -384,38 +389,77 @@ class Basedata extends CI_Model {
 	}
 	return $idObat;
     }
+    /*---------------------end beli---------------*/
+    
+    
+    /*---------------------penjualan---------------*/
+    public function getJual($id,$batas,$offset){
+        if($id!="all"){
+            $and="AND fak.id='$id'";
+        }else{
+            $and="";
+        }
+        if($batas==""){
+            $limit="";
+        }else{
+            $limit="LIMIT $offset,$batas";
+        }
+        $query=$this->db->query("SELECT fak.id,fak.faktur,fak.tanggal,cus.customer,fak.total,fak.target_id,cus.alamat,cus.phone1
+                FROM faktur fak
+                LEFT JOIN customer cus ON cus.id=fak.target_id 
+                WHERE fak.faktur_type_id='2' $and ORDER BY fak.id DESC $limit");
+        log_message('debug', '[QUERY CEK GET JUAL:]['.$this->db->last_query().'][RESULT:]['.json_encode($query->result()).']', false);
+        return $query->result();
+    }
+    public function count_jual(){
+        $this->db->where("faktur_type_id","2");
+        $query = $this->db->get("faktur")->num_rows();
+        return $query;
+    }
+    /*---------------------end penjualan---------------*/
+    
+    /*---------------------dashboard---------------*/
     function getDashBeliM(){
         $query=$this->db->query("SELECT a.tanggal,
-        (SELECT SUM(b.jumlah)
-        FROM pembelian b
-        WHERE b.tanggal =a.tanggal) as jumlah 
-        FROM pembelian a
+        (SELECT SUM(b.total)
+        FROM faktur b
+        WHERE b.tanggal =a.tanggal AND b.faktur_type_id='1') as jumlah 
+        FROM faktur a
         WHERE a.tanggal BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND NOW()
+        AND a.faktur_type_id='1'
         GROUP BY a.tanggal");
         return $query->result();
     }
     function getDashJualM(){
         $query=$this->db->query("SELECT a.tanggal,
         (SELECT SUM(b.total)
-        FROM jual b
-        WHERE b.tanggal =a.tanggal) as total 
-        FROM jual a
+        FROM faktur b
+        WHERE b.tanggal =a.tanggal AND b.faktur_type_id='2') as total 
+        FROM faktur a
         WHERE a.tanggal BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND NOW()
+        AND a.faktur_type_id='2'
         GROUP BY a.tanggal");
         return $query->result();
     }
     function getDashBrgJualM(){
-        $query=$this->db->query("SELECT a.barang,bar.nama,
-        (SELECT SUM(b.total)
-        FROM jual b
-        WHERE b.barang =a.barang) as total 
-        FROM jual a
-        INNER JOIN barang bar on bar.id_barang=a.barang
-        WHERE a.tanggal BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND NOW()
-        GROUP BY a.barang");
+        $query=$this->db->query("SELECT bar.nama,
+            (SELECT SUM(fo1.jumlah*bar1.harga_jual)
+            FROM faktur_order fo1
+            INNER JOIN faktur fak1 ON fak1.id=fo1.faktur_id
+            INNER JOIN barang bar1 ON bar1.id=fo1.barang_id
+            WHERE fak1.faktur_type_id='2'
+            AND fak1.tanggal=fak.tanggal
+            ) as total
+            FROM faktur_order fo
+            INNER JOIN faktur fak ON fak.id=fo.faktur_id
+            INNER JOIN barang bar ON bar.id=fo.barang_id
+            WHERE fak.faktur_type_id='2'
+            AND fak.tanggal BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND NOW()
+            GROUP BY fo.barang_id
+            ");
         return $query->result();
     }
-    /*---------------------end beli---------------*/
+    /*---------------------end dashboard---------------*/
     
     /*-----------------------login------------------*/
     public function cekLogin($post){

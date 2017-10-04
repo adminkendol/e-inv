@@ -29,6 +29,8 @@ $config['base_url'] .=  "://".$_SERVER['HTTP_HOST'];
 $config['base_url'] .=  str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
 $config['server_url']=  "http://infolalin.jasamarga.co.id/infolalin/detail.php";
 $config['title']="e-inventory";
+//$config['theme']="default";
+$config['theme']="neon";
 /*
 |--------------------------------------------------------------------------
 | Index File

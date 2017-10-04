@@ -8,7 +8,7 @@ charts={
         Highcharts.chart(dom, {
                 chart: {
                     type: 'pie',
-                    backgroundColor:'grey',
+                    /*backgroundColor:'grey',*/
                     options3d: {
                         enabled: true,
                         alpha: 45,
@@ -17,10 +17,10 @@ charts={
                 },
                 title: {
                     text: judul,
-                    style: {
+                    /*style: {
                         color: '#FFF',
                         font: 'bold 16px "Trebuchet MS", Verdana, sans-serif'
-                    }
+                    }*/
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -41,11 +41,48 @@ charts={
                     name: pointer,
                     dataLabels: {
                         enabled: true,
-                        color: '#FFFFFF'
+                        /*color: '#FFFFFF'*/
                     },
                     data: datas
                 }]
             });
+    },
+    line:function(datas,dom,judul,pointer,legend){
+        console.log("INTEGER:"+datas.seriesJual);
+        Highcharts.chart(dom, {
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: judul
+            },
+            subtitle: {
+                text: 'Source: WorldClimate.com'
+            },
+            xAxis: {
+                categories: datas.labelsBeli
+            },
+            yAxis: {
+                title: {
+                    text: legend
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: false
+                }
+            },
+            series: [{
+                name: 'Penjualan',
+                data: datas.seriesJual
+                }, {
+                name: 'Pembelian',
+                data: datas.seriesBeli
+                }]
+        });
     }
 }
 

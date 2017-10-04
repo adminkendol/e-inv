@@ -20,10 +20,14 @@ class Main_Controller extends CI_Controller {
     function __construct() {
         parent::__construct();
         if(!$this->session->userdata('nama')){
+            $this->data['namaLogin']="";
             redirect('login');
+        }else{
+            $this->data['namaLogin']=$this->session->userdata('nama');
         }
         $this->config->load('config', true);
         $this->config->load('pagination', TRUE);
+        $this->theme=$this->config->item('theme');
         $this->data['title']=$this->config->item('title');
         $this->settings = $this->config->item('pagination');
         $this->load->model(array('base/basedata'));
@@ -31,7 +35,7 @@ class Main_Controller extends CI_Controller {
         $last = $this->uri->total_segments();
         $this->record = $this->uri->segment($last);
         $this->input_by=$this->session->userdata('id');
-        
+        $this->data['parent']="0";
         
         
         $this->data['dataBeli']= json_encode(array());
