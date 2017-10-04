@@ -444,7 +444,6 @@ class Core extends Main_Controller {
         $this->data['dataMaxBeli']=max($series);
         $this->data['dataJual']=json_encode(array("labels"=>$labelsA,"series"=>array($seriesA)));
         $this->data['dataDashLine']=json_encode(array("labelsBeli"=>$labels,"seriesBeli"=>$series,"labelsJual"=>$labelsA,"seriesJual"=>$seriesA));
-        //print_r($this->data['dataDashLine']);die;
         $this->data['dataMaxJual']="RP".number_format(max($seriesA),2,',','.');
         $this->data['dataBrgJual']=json_encode($this->dataPie);
         $this->data['dataMaxBrgJual']="RP".number_format(max($seriesB),2,',','.');

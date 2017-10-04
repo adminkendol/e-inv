@@ -42,5 +42,10 @@ class Main_Controller extends CI_Controller {
         $this->data['dataJual']=json_encode(array());
         $this->data['dataBrgJual']=json_encode(array());
         
+        $this->data['dataMaxBeli']="";
+        $this->data['dataDashLine']=json_encode(array());
+        $this->data['dataMaxJual']="";
+        $this->data['dataMaxBrgJual']="";
+        
     }
 }
