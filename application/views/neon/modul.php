@@ -16,8 +16,9 @@
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/neon/assets/css/neon-theme.css">
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/neon/assets/css/neon-forms.css">
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/neon/assets/css/custom.css">
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/css/themes/jquery.ui.all.css" type="text/css" />
     <script src="<?php echo base_url(); ?>assets/neon/assets/js/jquery-1.11.3.min.js"></script>
-
+    <script src="<?php echo base_url()?>assets/js/jquery-ui-1.10.3.js"></script>
 	<!--[if lt IE 9]><script src="<?php echo base_url(); ?>assets/neon/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
 	
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -245,12 +246,12 @@
        //var lastPath=path[path.length - 2];
        // Javascript method's body can be found in assets/js/demos.js
         //demo.initDashboardPageCharts();
-        /*$('.tgl').datepicker({
+        $('.tgl').datepicker({
             format: 'dd-mm-yyyy',
             autoclose: true,
         }).on('changeDate', function (ev) {
             $(this).datepicker('hide');
-        });*/
+        });
         if (lastPath=="dashboard"){
             var datasA=<?php if($dataDashLine){echo $dataDashLine;} ?>;
             console.log("dashBeli:"+JSON.stringify(datasA.seriesBeli));
@@ -261,20 +262,14 @@
             var legend = 'Pembelian';
             charts.line(datasA,dom,judul,pointer,legend);
             
-            
-            
             var datas= <?php if($dataBrgJual){echo $dataBrgJual;} ?>;
             var dom = 'dailyPieBrg';
             var judul = 'Penjualan Barang perminggu';
             var pointer = 'Barang dalam pejualan';
             charts.pie(datas,dom,judul,pointer);
         }else if ((lastPath=="addbeli")||(lastPath=="savebeli")||(lastPath=="addjual")||(lastPath=="savejual")){
-            //var sesId=parseInt($("#totallHidden").val());
             var id=0;
             $("#addBeli").click(function(){
-                /*if(sesId!=0){
-                    id=sesId;
-                }*/
                 id=parseInt(id) + 1;
                 $.post("<?php echo base_url()."core/apiSelBrg"; ?>", {id: id}, function(result){
                     $("#tblBarang").append("<tr>\n\
@@ -314,8 +309,7 @@
 	var total=0;
 	var values = 0;
 	if (isNaN($("#jumlah"+id).val())|| ($("#jumlah"+id).val()<0)){ 
-            $( "#infodlg" ).html("Jumlah Tidak Sesuai !!!");
-            $( "#infodlg" ).dialog({ title:"Info...", draggable: false, modal: true});
+            toastr.error('Jumlah Tidak Sesuai !!!');
             $("#jumlah"+id).val('0');
             return false;
 	} else {
@@ -349,15 +343,13 @@
     }
     function confirmdlg(){
         if($("#supplier").val()==''){
-            $( "#infodlg" ).html("Supplier Tidak Boleh Kosong");
-            $( "#infodlg" ).dialog({ title:"Info...", draggable: false, modal: true});		
+            toastr.error('Supplier Tidak Boleh Kosong');
         } else if($("#faktur").val()==''){
-            $( "#infodlg" ).html("Nomor Faktur Tidak Boleh Kosong");
-            $( "#infodlg" ).dialog({ title:"Info...", draggable: false, modal: true});
+            toastr.error('Nomor Faktur Tidak Boleh Kosong');
         } else if($("#tanggal").val()==''){
-            $( "#infodlg" ).html("Tanggal beli Tidak Boleh Kosong");
-            $( "#infodlg" ).dialog({ title:"Info...", draggable: false, modal: true});		
+            toastr.error('Tanggal beli Tidak Boleh Kosong');
 	} else {
+            //jQuery('#confirm').modal('show')
             $("#confirm").dialog({
                 resizable: false,
 		modal: true,
@@ -388,8 +380,7 @@
                     },
             success:function(data){
                 if(data!=''){
-                    $( "#infodlg" ).html(data);
-                    $( "#infodlg" ).dialog({ title:"Info...", draggable: false,modal: true});					 
+                    toastr.error(data);
 		} else {
                     $( "#infodlg" ).html("Sukses Menyimpan Data... ");	
                     $( "#infodlg" ).dialog({ title:"Info...", draggable: false, modal: true, buttons: {

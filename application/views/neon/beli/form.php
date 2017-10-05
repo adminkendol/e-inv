@@ -12,16 +12,18 @@ if(sizeof($rec)==0){
     $total="Rp.".number_format($rec[0]->total,2,',','.');
  }
 ?>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header" data-background-color="purple">
-                    <h4 class="title">Form Beli</h4>
-                    <p class="category">Lengkapi isi field</p>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-gradient">
+            <div class="panel-heading">
+                <div class="panel-title">Form Beli</div>
+                <div class="panel-options">
+                    <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
+                    <a href="#" data-rel="close" class="bg"><i class="entypo-cancel"></i></a>
                 </div>
-                <div class="card-content">
-                    <form method="post" action="" id="form_beli">
+            </div>
+            <div class="panel-body">
+                <form method="post" action="" id="form_beli" class="form-horizontal form-groups">
                         <?php
                         if(validation_errors()){ ?>
                             <div class="alert alert-danger">
@@ -35,29 +37,26 @@ if(sizeof($rec)==0){
                                 <span><?php echo $valdata; ?></span>
                             </div>
                         <?php } ?>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Faktur</label>
-                                    <input type="text" class="form-control" name="faktur" id="faktur" value="<?php echo $autofaktur; ?>" readonly >
-                                    <input type="hidden" id="totallHidden" name="totallHidden" value="">
-                                    <input type="hidden" id="idRec" name="idRec" value="<?php echo $idRec;?>">
-                                    <input type="hidden" id="sesbeli" name="sesbeli" value="<?php echo date("YmdHms"); ?>">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Tanggal Beli</label>
-                                    <input type="text" class="form-control tgl" name="tanggal" id="tanggal" value="<?php echo $tanggal; ?>">
-                                </div>
-                            </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Faktur</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" name="faktur" id="faktur" value="<?php echo $autofaktur; ?>" readonly >
+                            <input type="hidden" id="totallHidden" name="totallHidden" value="">
+                            <input type="hidden" id="idRec" name="idRec" value="<?php echo $idRec;?>">
+                            <input type="hidden" id="sesbeli" name="sesbeli" value="<?php echo date("YmdHms"); ?>">
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Supplier</label>
-                                    <select class="form-control" name="supplier" id="supplier">
-                                        <option value=""></option>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Tanggal Beli</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control tgl" name="tanggal" id="tanggal" value="<?php echo $tanggal; ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Supplier</label>
+                        <div class="col-sm-5">
+                            <select class="form-control" name="supplier" id="supplier">
+                                <option value=""></option>
                                         <?php foreach($supplier as $sup){ 
                                             if($sup->id==$sups){
                                                 $selected="selected";
@@ -65,58 +64,65 @@ if(sizeof($rec)==0){
                                                 $selected="";
                                             }
                                             ?>
-                                        <option value="<?php echo $sup->id; ?>" <?php echo $selected; ?>><?php echo $sup->nama; ?></option>
+                                <option value="<?php echo $sup->id; ?>" <?php echo $selected; ?>><?php echo $sup->nama; ?></option>
                                         <?php } ?>
-                                    </select>
-                                </div>
-                            </div>
+                            </select>
                         </div>
-                        <?php if(sizeof($rec)==0){ ?> 
-                        <button id="addBeli" type="button" class="btn btn-info">
-                            <span class="glyphicon glyphicon-plus"></span> Barang
-                        </button>
-                        <?php } ?>
-                        <div class="clearfix"></div>
-                        <div class="card-content table-responsive">
-                            <table class="table table-hover">
-                                <thead class="text-warning">
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-5">
+                            <?php if(sizeof($rec)==0){ ?> 
+                                <button id="addBeli" type="button" class="btn btn-info">
+                                    <span class="glyphicon glyphicon-plus"></span> Barang
+                                </button>
+                            <?php } ?>
+			</div>
+                    </div>
+                    <div class="form-group">
+                        <table class="table table-bordered table-responsive">
+                            <thead>
+                                <tr>
                                     <th>Barang</th>
                                     <th>Jumlah</th>
                                     <th>Kategori</th>
                                     <th>@harga</th>
                                     <th>Stok</th>
                                     <th>Total</th>
+                                    <?php if(sizeof($rec)==0){ ?> 
                                     <th></th>
-                                </thead>
-                                <tbody id="tblBarang">
-                                    <?php if(sizeof($rec)>0){  
-                                                if (sizeof($recOrder)>0){ 
-                                                    foreach($recOrder as $ro){ ?>
-                                    <tr>
-                                        <td><?php echo $ro->nama; ?></td>
-                                        <td><?php echo $ro->jumlah; ?></td>
-                                        <td><?php echo $ro->kategori; ?></td>
-                                        <td><?php echo $ro->harga_beli; ?></td>
-                                        <td><?php echo $ro->stok; ?></td>
-                                        <td><?php echo $ro->jumlah * $ro->harga_beli; ?></td>
-                                    </tr>
-                                                <?php  }
-                                                }
-                                        
-                                     } ?>
-                                </tbody>
-                            </table>
+                                    <?php } ?>
+                                </tr>
+                            </thead>
+                            <tbody id="tblBarang">
+                                <?php if(sizeof($rec)>0){  
+                                        if (sizeof($recOrder)>0){ 
+                                            foreach($recOrder as $ro){ ?>
+                                <tr>
+                                    <td><?php echo $ro->nama; ?></td>
+                                    <td><?php echo $ro->jumlah; ?></td>
+                                    <td><?php echo $ro->kategori; ?></td>
+                                    <td><?php echo $ro->harga_beli; ?></td>
+                                    <td><?php echo $ro->stok; ?></td>
+                                    <td><?php echo $ro->jumlah * $ro->harga_beli; ?></td>
+                                </tr>
+                                    <?php  }
+                                        }
+                                    } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <a type="button" id="totall" href="#" class="btn btn-green pull-right"><?php echo $total; ?></a>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-1">
+                            <button type="button" onclick="return confirmdlg()" id="simpan" class="btn btn-blue pull-left">Simpan</button>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <a type="button" id="totall" href="#" class="btn btn-warning pull-right"><?php echo $total; ?></a>
-                            </div>
+                        <div class="col-md-1">
+                            <a href="<?php echo base_url().'core/beli';?>" type="button" id="cancel" class="btn btn-danger pull-left">Batal</a>
                         </div>
-                        <div class="clearfix"></div>
-                        <button type="button" onclick="return confirmdlg()" id="simpan" class="btn btn-primary pull-left">Simpan</button>
-                        <a href="<?php echo base_url().'core/beli';?>" type="button" id="cancel" class="btn btn-danger pull-left">Batal</a>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

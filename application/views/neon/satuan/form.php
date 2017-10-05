@@ -20,7 +20,7 @@ if(sizeof($rec)==0){
                 </div>
             </div>
             <div class="panel-body">
-                <form method="post" action="<?php echo base_url().'core/savekategori';?>" class="form-horizontal form-groups">
+                <form method="post" action="<?php echo base_url().'core/savesatuan';?>" class="form-horizontal form-groups">
                         <?php
                         if(validation_errors()){ ?>
                             <div class="alert alert-danger">

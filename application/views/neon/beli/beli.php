@@ -1,7 +1,6 @@
 <script>
     function remTable(id){
-        $( "#infodlg" ).html("Anda tidak berhak menghapus");
-	$( "#infodlg" ).dialog({ title:"Info...", draggable: false,modal: true});
+        toastr.error('Anda tidak berhak menghapus');
     }
 </script>
 <div class="panel panel-gradient">
