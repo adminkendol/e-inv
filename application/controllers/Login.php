@@ -20,6 +20,7 @@ class Login extends CI_Controller {
         $last = $this->uri->total_segments();
         $this->record = $this->uri->segment($last);
         $this->data['namaLogin']="";
+        $this->data['parent']="";
     }
     public function index(){
         $this->data['title']=$this->title;

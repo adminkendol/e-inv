@@ -1,15 +1,10 @@
 <?php
-//$exp=date('d-m-Y',strtotime("+1 year"));
-//print_r($autofaktur);die;
 $tanggal=date("d-m-Y");
 $total="Rp.0.00";
 if(sizeof($rec)==0){
     $idRec=set_value('idRec');
-    //$autofaktur=set_value('faktur');
-    //$tanggal=set_value('tanggal');
     $sups=set_value('supplier');
 }else{
-    //print_r($rec);die;
     $idRec=$rec[0]->id;
     $autofaktur=$rec[0]->faktur;
     $tanggal=date("d-m-Y",strtotime($rec[0]->tanggal));
