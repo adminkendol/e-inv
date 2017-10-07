@@ -234,7 +234,7 @@
     <script src="<?php echo base_url(); ?>assets/carts/highcharts-3d.js"></script>
     <script src="<?php echo base_url(); ?>assets/carts/modules/exporting.js"></script>
     <!--<script src="<?php echo base_url(); ?>assets/js/bsn.AutoSuggest_c_2.0.js"></script>-->
-    <script src="<?php echo base_url(); ?>assets/js/jquery.mockjax.js"></script>
+    <!--<script src="<?php echo base_url(); ?>assets/js/jquery.mockjax.js"></script>-->
     <script src="<?php echo base_url(); ?>assets/js/bootstrap3-typeahead.min.js"></script>
     
     <script src="<?php echo base_url(); ?>assets/js/charts.js"></script>
