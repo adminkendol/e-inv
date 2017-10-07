@@ -44,6 +44,51 @@ class Basedata extends CI_Model {
     }
     /*---------------------end supplier---------------*/
     
+    /*---------------------customer---------------*/
+    public function getCust($id,$batas,$offset){
+        if($id!="all"){
+            $where="WHERE cus.id='$id'";
+        }else{
+            $where="";
+        }
+        if($batas==""){
+            $limit="";
+        }else{
+            $limit="LIMIT $offset,$batas";
+        }
+        $query=$this->db->query("SELECT cus.*
+                FROM customer cus
+                $where ORDER BY id DESC $limit");
+        return $query->result();
+    }
+    public function count_cust(){
+        $query = $this->db->get("customer")->num_rows();
+        return $query;
+    }
+    public function setCustomer($post){
+        $batas="";
+        $offset="";
+        $cek=$this->getCust($post['idRec'],$batas,$offset);
+        $data = array(
+            'customer'=>$post['customer'],
+            'ktp'=>$post['ktp'],
+            'alamat'=>$post['alamat'],
+            'phone1'=>$post['phone1'],
+            'phone2'=>$post['phone2'],
+            'email'=>$post['email']
+        );
+        if(sizeof($cek)==0){
+            $this->db->insert('customer',$data);
+        }else{
+            $this->db->where('id', $post['idRec']);
+            $this->db->update('customer', $data);
+        }
+    }
+    public function delCustomer($id){
+        $this->db->query("DELETE FROM customer WHERE id='$id'");
+    }
+    /*---------------------end customer---------------*/
+    
     /*---------------------kategori---------------*/
     public function getKategori($id){
         if($id!="all"){
@@ -123,6 +168,35 @@ class Basedata extends CI_Model {
         }
     }
     /*---------------------end tax---------------*/
+    
+    /*---------------------user---------------*/
+    public function getUser($id){
+        if($id!="all"){
+            $where="WHERE id='$id'";
+        }else{
+            $where="";
+        }
+        $query=$this->db->query("SELECT * FROM t_user $where ORDER BY id DESC");
+        return $query->result();
+    }
+    public function setUser($post){
+        $cek=$this->getUser($post['idRec']);
+        $data = array(
+            'nama'=>$post['name'],
+            'username'=>$post['username'],
+            'password'=>md5($post['password'])
+        );
+        if(sizeof($cek)==0){
+            $this->db->insert('t_user',$data);
+        }else{
+            $this->db->where('id', $post['idRec']);
+            $this->db->update('t_user', $data);
+        }
+    }
+    public function delUser($id){
+        $this->db->query("DELETE FROM t_user WHERE id='$id'");
+    }
+    /*---------------------end kategori---------------*/
     
     /*---------------------barang---------------*/
     public function getBarang($id,$batas,$offset){
