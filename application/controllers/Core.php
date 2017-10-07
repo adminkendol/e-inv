@@ -336,6 +336,43 @@ class Core extends Main_Controller {
         $this->data['autofaktur']=$this->basedata->autoFakturN("2");
         $this->tempe->load($this->theme.'/modul',$this->theme.'/jual/form',$this->data);
     }
+    function actjual(){
+        $array=$this->input->post('lstobat');
+        if($this->input->post('idRec')==""){
+            if(sizeof($array)>0){
+                if(count(array_unique($array))<count($array)){
+                    echo"Nama Barang Tidak Boleh Sama";
+                    return false;
+                }else{
+                    $this->basedata->actionjual($this->input_by);
+                }
+            }else{
+                echo"Nama Barang Tidak Boleh Kosong";
+                return false;
+            }    
+        }else{
+            $this->basedata->actionjual($this->input_by);
+        }
+    }
+    public function editjual(){
+        $this->data['headtitle']="Penjualan";
+        $this->data['menu_id']="3";
+        $this->data['rec']=$this->basedata->getJual($this->record,"","");
+        $this->data['recOrder']=$this->basedata->getOrder($this->record);
+        $this->data['valid']="0";
+        $this->data['valdata']="";
+        $id="all";
+        $this->data['autofaktur']=$this->data['rec'][0]->faktur;
+        $this->tempe->load($this->theme.'/modul',$this->theme.'/jual/form',$this->data);
+    }
+    public function printfoj(){
+        $this->data['headtitle']="Print Penjualan";
+        $this->data['menu_id']="3";
+        $this->data['rec']=$this->basedata->getjual($this->record,"","");
+        $this->data['recOrder']=$this->basedata->getOrder($this->record);
+        $this->data['autofaktur']=$this->data['rec'][0]->faktur;
+        $this->tempe->load($this->theme.'/modul',$this->theme.'/jual/print',$this->data);
+    }
     /*--------------end penjualan-----------------------------*/
     
     

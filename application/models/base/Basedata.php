@@ -404,7 +404,9 @@ class Basedata extends CI_Model {
         }else{
             $limit="LIMIT $offset,$batas";
         }
-        $query=$this->db->query("SELECT fak.id,fak.faktur,fak.tanggal,cus.customer,fak.total,fak.target_id,cus.alamat,cus.phone1
+        $query=$this->db->query("SELECT fak.id,fak.faktur,fak.tanggal,cus.customer,
+                cus.id as customer_id,cus.ktp,cus.alamat,cus.phone1,cus.phone2,cus.email,
+                fak.total,fak.target_id,cus.alamat,cus.phone1
                 FROM faktur fak
                 LEFT JOIN customer cus ON cus.id=fak.target_id 
                 WHERE fak.faktur_type_id='2' $and ORDER BY fak.id DESC $limit");
@@ -415,6 +417,68 @@ class Basedata extends CI_Model {
         $this->db->where("faktur_type_id","2");
         $query = $this->db->get("faktur")->num_rows();
         return $query;
+    }
+    function actionjual($input_by){
+        $idRec=$this->input->post('idRec');
+        $tanggal=date("Y-m-d",strtotime($this->input->post('tanggal')));
+	$faktur=$this->input->post('faktur');
+        if($this->input->post('customer_id')!=""){
+            $supplier=$this->input->post('customer_id');
+        }else{
+            $dataCus=array('customer'=>$this->input->post('customer'),
+                    'ktp'=>$this->input->post('ktp'),
+                    'alamat'=>$this->input->post('alamat'),
+                    'phone1'=>$this->input->post('phone1'),
+                    'phone2'=>$this->input->post('phone2'),
+                    'email'=>$this->input->post('email'),
+                    'input_by'=>$input_by,
+                    'input_date'=>date('Y-m-d h:i:s'));
+            $this->db->insert('customer',$dataCus);
+            $supplier=$this->db->insert_id();
+        }
+	$sesbeli=$this->input->post('sesjual');
+	$i=0;
+	$jumlahBeli=count($this->input->post('jumlah'));
+        $total=$this->input->post('totallHidden');
+	$ljumObat=$this->input->post('jumlah');
+        
+        $cek=$this->getJual($idRec,"","");
+        $lObat=$this->input->post('lstobat');
+        if(sizeof($cek)==0){
+            $data=array('faktur_type_id'=>'2',
+                    'faktur'=>$faktur,
+                    'target_id'=>$supplier,
+                    'tanggal'=>$tanggal,
+                    'total'=>$total,
+                    'sesion'=>$sesbeli,
+                    'input_by'=>$input_by,
+                    'input_date'=>date('Y-m-d h:i:s'));
+            $this->db->insert('faktur',$data);
+            $id=$this->db->insert_id();
+            for($i;$i<$jumlahBeli;$i++){
+                $jumObat = $ljumObat[$i];
+                $Obat = $lObat[$i];
+                $getId=$this->getIdObat($Obat);
+                $data=array(
+			 'faktur_id'=>$id,
+			 'barang_id'=>$getId,
+			 'jumlah'=>$jumObat
+			);
+                $this->db->trans_start();
+                $this->db->insert('faktur_order',$data);
+                $this->db->trans_complete();
+                $this->tambahBarang($Obat,$jumObat);
+            }
+        }else{
+            $data=array('faktur_type_id'=>'2',
+                    'faktur'=>$faktur,
+                    'target_id'=>$supplier,
+                    'tanggal'=>$tanggal,
+                    'edit_by'=>$input_by,
+                    'edit_date'=>date('Y-m-d h:i:s'));
+            $this->db->where('id', $idRec);
+            $this->db->update('faktur', $data);
+        }
     }
     /*---------------------end penjualan---------------*/
     
@@ -460,6 +524,14 @@ class Basedata extends CI_Model {
         return $query->result();
     }
     /*---------------------end dashboard---------------*/
+    
+    /*-----------------------API------------------*/
+    public function getCustomer($name){
+        $query=$this->db->query("SELECT * FROM customer WHERE customer LIKE '%$name%'");
+        return $query->result();
+    }
+    /*-----------------------end API------------------*/
+    
     
     /*-----------------------login------------------*/
     public function cekLogin($post){

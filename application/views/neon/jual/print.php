@@ -22,10 +22,10 @@
             <div class="row">
                 <div class="col-md-6">
                     <address>
-                        <strong>Supplier:</strong><br>
-    			<?php echo $rec[0]->sup_nama; ?><br>
+                        <strong>Customer:</strong><br>
+    			<?php echo $rec[0]->customer; ?><br>
                         <?php echo $rec[0]->alamat; ?><br>
-                        <?php echo $rec[0]->telepon; ?><br>
+                        <?php echo $rec[0]->phone1; ?><br>
                     </address>
     		</div>
     		<div class="col-md-6 text-right">
@@ -35,21 +35,7 @@
                     </address>
     		</div>
             </div>
-            <!--<div class="row">
-                <div class="col-md-6">
-                    <address>
-                        <strong>Tanggal Order:</strong><br>
-    			<?php echo $rec[0]->tanggal; ?><br>
-                    </address>
-    		</div>
-                <div class="col-md-6 text-right">
-                    <address>
-                        <strong>Order Date:</strong><br>
-    			March 7, 2014<br><br>
-                    </address>
-    		</div>
-            </div>-->
-    	</div>
+        </div>
     </div>
     
     <div class="row">
@@ -121,4 +107,4 @@
 </div>
 <div class="clearfix"></div>
 <button type="button" onclick="printDiv('printableArea')" id="simpan" class="btn btn-primary pull-left">Cetak</button>
-<a href="<?php echo base_url().'core/beli';?>" type="button" id="cancel" class="btn btn-danger pull-left">Batal</a>
+<a href="<?php echo base_url().'core/jual';?>" type="button" id="cancel" class="btn btn-danger pull-left">Batal</a>

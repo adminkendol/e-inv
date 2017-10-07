@@ -233,6 +233,10 @@
     <script src="<?php echo base_url(); ?>assets/carts/highcharts.js"></script>
     <script src="<?php echo base_url(); ?>assets/carts/highcharts-3d.js"></script>
     <script src="<?php echo base_url(); ?>assets/carts/modules/exporting.js"></script>
+    <!--<script src="<?php echo base_url(); ?>assets/js/bsn.AutoSuggest_c_2.0.js"></script>-->
+    <script src="<?php echo base_url(); ?>assets/js/jquery.mockjax.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/bootstrap3-typeahead.min.js"></script>
+    
     <script src="<?php echo base_url(); ?>assets/js/charts.js"></script>
     <!-- JavaScripts initializations and stuff -->
     <script src="<?php echo base_url(); ?>assets/neon/assets/js/neon-custom.js"></script>
@@ -297,6 +301,40 @@
         }
         
         //console.log("pie:"+JSON.stringify(datas));
+        /*function displayResult(item) {
+            alert(JSON.stringify(item));
+        }*/
+        
+
+        $('#customer').typeahead({
+                    items: 4,
+                    autoSelect: true,
+                    source: function (query, process) {
+                            $.ajax({
+                                url: '<?php echo base_url()."api/customer"; ?>',
+                                type: 'POST',
+                                dataType: 'JSON',
+                                data: 'name=' + query,
+                                success: function(data) {
+                                    console.log(data);
+                                    process(data);
+                                    
+                                }
+                            });
+                        },
+                    displayText: function(item) {
+                                    return item.customer+" | Telepon : "+item.phone1;
+                    },
+                    afterSelect: function(item) {
+                                    $("#customer_id").val(item.id);
+                                    $("#customer").val(item.customer);
+                                    $("#ktp").val(item.ktp);
+                                    $("#alamat").val(item.alamat);
+                                    $("#phone1").val(item.phone1);
+                                    $("#phone2").val(item.phone2);
+                                    $("#email").val(item.email);
+                    }
+                }); 
     });
     function selBrg(id){
         $.post("<?php echo base_url()."core/apiSelBrg"; ?>", {id: id}, function(result){
@@ -369,6 +407,33 @@
             });
 	} <!-- END OF ELSE -->
     }
+    function confirmdlgJual(){
+        if($("#customer").val()==''){
+            toastr.error('Customer Tidak Boleh Kosong');
+        } else if($("#faktur").val()==''){
+            toastr.error('Nomor Faktur Tidak Boleh Kosong');
+        } else if($("#tanggal").val()==''){
+            toastr.error('Tanggal beli Tidak Boleh Kosong');
+	} else {
+            $("#confirm").dialog({
+                resizable: false,
+		modal: true,
+		title:"Info...",
+		draggable: false,
+		width: 'auto',
+		height: 'auto',
+		buttons: {
+                    "Ya": function(){
+                            saveJual();   
+                            $(this).dialog("close");
+			},
+                    "Tutup": function(){
+                            $(this).dialog("close");
+			}
+		}
+            });
+	} 
+    }
     function save(){
         console.log("post:"+$('#form_beli').serialize());
 	$.ajax({
@@ -382,13 +447,27 @@
                 if(data!=''){
                     toastr.error(data);
 		} else {
-                    $( "#infodlg" ).html("Sukses Menyimpan Data... ");	
-                    $( "#infodlg" ).dialog({ title:"Info...", draggable: false, modal: true, buttons: {
-                        "Ya":function(){
-                                window.location="<?php echo base_url() ?>core/beli";
-				$(this).dialog("close");
-                            } 
-                    }});						
+                    toastr.success("Sukses Menyimpan Data... ");
+                    window.location="<?php echo base_url() ?>core/beli";
+		}
+            }
+	});		
+    }
+    function saveJual(){
+        console.log("post:"+$('#form_jual').serialize());
+	$.ajax({
+            url:'<?php echo base_url(); ?>core/actjual/',		 
+            type:'POST',
+            data:$('#form_jual').serialize(),
+            error:  function (xhr, status) {
+                        alert(status);
+                    },
+            success:function(data){
+                if(data!=''){
+                    toastr.error(data);
+		} else {
+                    toastr.success("Sukses Menyimpan Data... ");
+                    window.location="<?php echo base_url() ?>core/jual";
 		}
             }
 	});		
@@ -401,12 +480,8 @@
         window.print();
         $('body').html(originalContent);
     }
-    /*$('#barang').bootcomplete({
-        url:'<?php echo base_url()."core/apibrg"; ?>',
-        minLength:2
-    });*/
     
-     
+    
 </script>
 
 </body>
