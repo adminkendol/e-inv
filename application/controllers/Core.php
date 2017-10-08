@@ -588,6 +588,8 @@ class Core extends Main_Controller {
     public function repbeli(){
         $this->data['headtitle']="Report Pembelian";
         $this->data['menu_id']="11";
+        $this->data['typeReport']="Harga Beli";
+        $this->data['target']="Supplier";
         $id="1";
         $this->settings['base_url'] = site_url('core/repbeli');
         $this->settings['total_rows'] = $this->basedata->count_barang();
@@ -597,12 +599,14 @@ class Core extends Main_Controller {
         $this->data['page'] = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $this->data['pagination'] = $this->pagination->create_links();
         $this->data['report']=$this->basedata->getReport($id,$this->settings["per_page"], $this->data['page']);
-        print_r($this->data['report']);die;
+        //print_r($this->data['report']);die;
         $this->tempe->load($this->theme.'/modul',$this->theme.'/report/report',$this->data);
     }
     public function repjual(){
         $this->data['headtitle']="Report Penjualan";
         $this->data['menu_id']="12";
+        $this->data['typeReport']="Harga Jual";
+        $this->data['target']="Customer";
         $id="2";
         $this->settings['base_url'] = site_url('core/repjual');
         $this->settings['total_rows'] = $this->basedata->count_barang();
@@ -612,7 +616,7 @@ class Core extends Main_Controller {
         $this->data['page'] = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $this->data['pagination'] = $this->pagination->create_links();
         $this->data['report']=$this->basedata->getReport($id,$this->settings["per_page"], $this->data['page']);
-        print_r($this->data['report']);die;
+        //print_r($this->data['report']);die;
         $this->tempe->load($this->theme.'/modul',$this->theme.'/report/report',$this->data);
     }
     /*---------------------end report--------------------------------*/

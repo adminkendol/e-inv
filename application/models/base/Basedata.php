@@ -602,10 +602,10 @@ class Basedata extends CI_Model {
     /*---------------------report---------------*/
     function getReport($type,$batas,$offset){
         if($type=="1"){
-            $field="bar.harga_beli,sup.nama";
+            $field="bar.harga_beli AS harga,sup.nama AS target";
             $join ="INNER JOIN supplier sup ON sup.id=fak.target_id";
         }else{
-            $field="bar.harga_jual,cus.customer";
+            $field="bar.harga_jual AS harga,cus.customer AS target";
             $join ="INNER JOIN customer cus ON cus.id=fak.target_id";
         }
         if($batas==""){
@@ -613,7 +613,7 @@ class Basedata extends CI_Model {
         }else{
             $limit="LIMIT $offset,$batas";
         }
-        $query=$this->db->query("SELECT fak.faktur, bar.nama,fak.tanggal,fo.jumlah,fak.total,$field
+        $query=$this->db->query("SELECT fak.faktur, bar.nama AS barang,fak.tanggal,fo.jumlah,fak.total,$field
         FROM faktur_order fo
         INNER JOIN faktur fak ON fak.id=fo.faktur_id
         INNER JOIN barang bar ON bar.id=fo.barang_id
