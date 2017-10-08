@@ -74,12 +74,12 @@ if(sizeof($rec)==0){
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-1">
+                        <div class="col-sm-offset-3 col-sm-5">
                             <button type="submit" id="simpan" class="btn btn-blue pull-left">Simpan</button>
                         </div>
-                        <div class="col-md-1">
+                        <!--<div class="col-sm-1">
                             <a href="<?php echo base_url().'core/customer';?>" type="button" id="cancel" class="btn btn-danger pull-left">Batal</a>
-                        </div>
+                        </div>-->
                     </div>
                 </form>
             </div>

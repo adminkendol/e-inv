@@ -599,6 +599,32 @@ class Basedata extends CI_Model {
     }
     /*---------------------end dashboard---------------*/
     
+    /*---------------------report---------------*/
+    function getReport($type,$batas,$offset){
+        if($type=="1"){
+            $field="bar.harga_beli,sup.nama";
+            $join ="INNER JOIN supplier sup ON sup.id=fak.target_id";
+        }else{
+            $field="bar.harga_jual,cus.customer";
+            $join ="INNER JOIN customer cus ON cus.id=fak.target_id";
+        }
+        if($batas==""){
+            $limit="";
+        }else{
+            $limit="LIMIT $offset,$batas";
+        }
+        $query=$this->db->query("SELECT fak.faktur, bar.nama,fak.tanggal,fo.jumlah,fak.total,$field
+        FROM faktur_order fo
+        INNER JOIN faktur fak ON fak.id=fo.faktur_id
+        INNER JOIN barang bar ON bar.id=fo.barang_id
+        $join
+        WHERE fak.faktur_type_id = '$type'
+        ORDER BY fo.faktur_id ASC $limit");
+        return $query->result();
+    }
+    /*---------------------end report---------------*/
+    
+    
     /*-----------------------API------------------*/
     public function getCustomer($name){
         $query=$this->db->query("SELECT * FROM customer WHERE customer LIKE '%$name%'");

@@ -584,6 +584,40 @@ class Core extends Main_Controller {
     
     /*---------------------end dashboard--------------------------------*/
     
+    /*---------------------report--------------------------------*/
+    public function repbeli(){
+        $this->data['headtitle']="Report Pembelian";
+        $this->data['menu_id']="11";
+        $id="1";
+        $this->settings['base_url'] = site_url('core/repbeli');
+        $this->settings['total_rows'] = $this->basedata->count_barang();
+        $choice = $this->settings["total_rows"] / $this->settings["per_page"];
+        $this->settings["num_links"] = floor($choice);
+        $this->pagination->initialize($this->settings);
+        $this->data['page'] = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $this->data['pagination'] = $this->pagination->create_links();
+        $this->data['report']=$this->basedata->getReport($id,$this->settings["per_page"], $this->data['page']);
+        print_r($this->data['report']);die;
+        $this->tempe->load($this->theme.'/modul',$this->theme.'/report/report',$this->data);
+    }
+    public function repjual(){
+        $this->data['headtitle']="Report Penjualan";
+        $this->data['menu_id']="12";
+        $id="2";
+        $this->settings['base_url'] = site_url('core/repjual');
+        $this->settings['total_rows'] = $this->basedata->count_barang();
+        $choice = $this->settings["total_rows"] / $this->settings["per_page"];
+        $this->settings["num_links"] = floor($choice);
+        $this->pagination->initialize($this->settings);
+        $this->data['page'] = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $this->data['pagination'] = $this->pagination->create_links();
+        $this->data['report']=$this->basedata->getReport($id,$this->settings["per_page"], $this->data['page']);
+        print_r($this->data['report']);die;
+        $this->tempe->load($this->theme.'/modul',$this->theme.'/report/report',$this->data);
+    }
+    /*---------------------end report--------------------------------*/
+    
+    
     public function error(){
         $this->data['headtitle']="Error";
         $this->data['menu_id']="1";
